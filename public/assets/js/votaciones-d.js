@@ -54,7 +54,7 @@ var Votaciones = function(settings) {
     // Diputados
     ftClient.query({
         fields: ["*"],
-        table: "1OAvsKOSuQE3NzXNKGLwQpBDj9iK3mLweHb8Lcfg"
+        table: "1i_gDiq1mcYIGoVrA6Kst3fEGvMN6RH2z366C-eW0"      // Tabla diputados.
     }, function(rows) {
         congressmen = rows.map(function(row) {
             return {
@@ -68,7 +68,7 @@ var Votaciones = function(settings) {
     // Bloques
     ftClient.query({
         fields: ["*"],
-        table: "1gUTqf8A-nuvBGygRnVDcSftngYZ-z9OvxBs59M0"
+        table: "1v7GscZrDxlscNy9FbC_dAK7Hl_EKYGL89k9-o8l7"      // Tabla bloque diputados.
     }, function(rows) {
         color.domain([1, rows.filter(function(row) { return !row[2]}).length]);
         blocks = rows.map(function(row) {
@@ -85,7 +85,7 @@ var Votaciones = function(settings) {
         // Votaciones
         ftClient.query({
             fields: ["*"],
-            table: "1GNJAVHF_7xPZFhTc_w4RLxcyiD_lAiYTgVlA0D8",
+            table: "1qS1osYKCLGO-2b4AmaDvR4FQGIWPmIAJ9Aq1iMaC",     // Tabla votaciones diputados.
             tail: "WHERE asuntoId = '" + asuntoId + "'"
         }, function(rows) {
             data = rows.map(function(row) {
