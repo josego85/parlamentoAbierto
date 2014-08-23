@@ -30,7 +30,7 @@ var Votaciones = function(settings) {
     var color = d3.scale.linear()
         .range(["white", "black"])
 
-    var ftClient = new FTClient('AIzaSyCkG_rrZyBE2C9VJQVGhmJ2y_AVByUA4sc');
+    var ftClient = new FTClient('AIzaSyDICo1qGOtGnd0DD3QEY_rQ2_xcFGLNYto');
 
     svg = d3.select("#cuadrantes").append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -85,7 +85,7 @@ var Votaciones = function(settings) {
         // Votaciones
         ftClient.query({
             fields: ["*"],
-            table: "1qS1osYKCLGO-2b4AmaDvR4FQGIWPmIAJ9Aq1iMaC",     // Tabla votaciones diputados.
+            table: "1qS1osYKCLGO-2b4AmaDvR4FQGIWPmIAJ9Aq1iMaC",     // Tabla votaciones diputados
             tail: "WHERE asuntoId = '" + asuntoId + "'"
         }, function(rows) {
             data = rows.map(function(row) {
