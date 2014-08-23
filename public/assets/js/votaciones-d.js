@@ -30,7 +30,7 @@ var Votaciones = function(settings) {
     var color = d3.scale.linear()
         .range(["white", "black"])
 
-    var ftClient = new FTClient('AIzaSyDICo1qGOtGnd0DD3QEY_rQ2_xcFGLNYto');
+    var ftClient = new FTClient('AIzaSyCkG_rrZyBE2C9VJQVGhmJ2y_AVByUA4sc');
 
     svg = d3.select("#cuadrantes").append("svg")
         .attr("width", width + margin.left + margin.right)
