@@ -33,7 +33,8 @@ var controllers = angular.module('votaciones.controllers', ['votaciones.services
 
 controllers.controller('SelectionController', ['$scope', '$filter', 'Selection', function($scope, $filter, Selection) {
     $scope.selection = Selection;
-    var ftClient = new FTClient('AIzaSyCkG_rrZyBE2C9VJQVGhmJ2y_AVByUA4sc');
+    //var ftClient = new FTClient('AIzaSyCkG_rrZyBE2C9VJQVGhmJ2y_AVByUA4sc');
+    var ftClient = new FTClient('AIzaSyDICo1qGOtGnd0DD3QEY_rQ2_xcFGLNYto');
 
     $scope.viz = new Votaciones();
     $scope.vizShown = false;
