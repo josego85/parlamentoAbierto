@@ -28,7 +28,7 @@
 		// Convierte el json de bloque diputados a un array de bloque diputados.
 		$v_array_bloque_diputados = json_decode(file_get_contents($v_json_bloque_diputados, true));
 		
-		//print_r($p_cabecera);
+		
 		//print_r($p_votaciones);
 
 		
@@ -42,7 +42,7 @@
 		
 		$v_caracter_separador = ",";
 		$v_archivo_votaciones_csv = "votaciones-diputados.csv";
-		$v_cabecera_archivo_csv = "asuntoId" . $v_caracter_separador . "diputadoId" . 
+		$v_cabecera_archivo_votaciones_csv = "asuntoId" . $v_caracter_separador . "diputadoId" . 
 		    $v_caracter_separador . "bloqueId" . $v_caracter_separador ."voto \n";
 		$v_asuntoId = "1";
 		
@@ -50,7 +50,7 @@
 			echo "No puede abrir el archivo: " . $v_archivo_votaciones_csv;
 			exit;
 		}
-		if(fwrite($handle, utf8_decode($v_cabecera_archivo_csv)) === FALSE){
+		if(fwrite($handle, utf8_decode($v_cabecera_archivo_votaciones_csv)) === FALSE){
 			echo "No puede escribir en el archivo: " . $v_archivo_votaciones_csv;
 			exit;
 		}
@@ -88,9 +88,72 @@
 			}
 		}
 		fclose($handle);
+		
+		
+		
+		// Generar asuntos diputados en un archivo CSV.
+		$v_caracter_separador = ",";
+		$v_archivo_asuntos_votaciones_csv = "asuntos-diputados.csv";
+		$v_cabecera_archivo_asuntos_votaciones_csv = "asuntoId" . $v_caracter_separador. "sesion" .
+		    $v_caracter_separador . "asunto" . $v_caracter_separador . "ano" . $v_caracter_separador .
+		    "fecha" . $v_caracter_separador . "hora" . $v_caracter_separador . "base" . $v_caracter_separador .
+		    "mayoria" . $v_caracter_separador . "resultado" . $v_caracter_separador . "presidente" .
+		    $v_caracter_separador . "presentes" . $v_caracter_separador . "ausentes" . $v_caracter_separador .
+		    "abstenciones" . $v_caracter_separador . "afirmativos" . $v_caracter_separador . "negativos" .
+		    $v_caracter_separador . "votopresidente" . $v_caracter_separador . "titulo \n";
+		$v_asuntoId = "1";
+		
+		if(!$handle = fopen($v_archivo_asuntos_votaciones_csv, "w")){
+			echo "No puede abrir el archivo: " . $v_archivo_asuntos_votaciones_csv;
+			exit;
+		}
+		if(fwrite($handle, utf8_decode($v_cabecera_archivo_asuntos_votaciones_csv)) === FALSE){
+			echo "No puede escribir en el archivo: " . $v_archivo_asuntos_votaciones_csv;
+			exit;
+		}
+		
+		//print_r($p_cabecera);
+		//print_r($p_votaciones);
+		
+		//echo "Asunto: " . $p_cabecera['asunto'] . "\n";
+		
+		$v_sesion = "";
+		$v_asunto = $p_cabecera['asunto'];
+		$v_asunto = "";
+		$v_ano = $p_cabecera['ano'];
+		$v_fecha= $p_cabecera['fecha'];
+		$v_hora = $p_cabecera['hora'];
+		$v_base = "";
+		$v_mayoria = "";
+		$v_resultado = $p_cabecera['resultado'];
+		$v_presidente = "";
+		
+		// Se suma la cantidad de si, no, abstencion para los presentes.
+		$v_presentes = $p_votaciones['totales']['si'] +  $p_votaciones['totales']['no'] + $p_votaciones['totales']['abstencion'];
+		
+		$v_ausentes = $p_votaciones['totales']['ausentes'];
+		$v_abstenciones = $p_votaciones['totales']['abstencion'];
+		$v_afirmativos = $p_votaciones['totales']['si'];
+		$v_negativos = $p_votaciones['totales']['no'];
+		$v_votopresidente = "";
+		$v_titulo = "";
+		
+		// Los datos de la fila a insertar (asunto-diputado).
+		$v_fila_asuntos_votacion_diputado = $v_asuntoId . $v_caracter_separador . $v_sesion .
+		$v_caracter_separador . $v_asunto . $v_caracter_separador . $v_ano . $v_caracter_separador . $v_fecha .
+		    $v_caracter_separador . $v_hora . $v_caracter_separador . $v_base . $v_caracter_separador . $v_mayoria .
+		    $v_caracter_separador . $v_resultado . $v_caracter_separador . $v_presidente . $v_caracter_separador . $v_presentes .
+		    $v_caracter_separador . $v_ausentes .$v_caracter_separador . $v_abstenciones . $v_caracter_separador . $v_afirmativos .
+		    $v_caracter_separador . $v_negativos . $v_caracter_separador . $v_votopresidente .$v_caracter_separador . 
+		    $v_titulo . "\n";
+		
+		if(fwrite($handle, utf8_decode($v_fila_asuntos_votacion_diputado)) === FALSE){
+			echo "No puede escribir en el archivo: " . $v_archivo_asuntos_votaciones_csv;
+			exit;
+		}
+		fclose($handle);
 	}
-	
-	
+
 	
 	/**
 	 * Devuelve un objeto diputado que contiene el diputadoID y id_bloque.
