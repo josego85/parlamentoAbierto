@@ -1,6 +1,7 @@
 <?php
     require 'limpiarArchivoRTF.php';
-
+    require 'generarCSV.php';
+    
     // Datos del archivo.
     $tmp_name = $_FILES["votacion"]["tmp_name"];
     $name = $_FILES["votacion"]["name"];
@@ -12,9 +13,9 @@
 
     unlink(getcwd().'/'.$name);
 
-    $primero = preg_split("/[\n]+/",$v_archivo_rtf_limpio); //romper el string en elementos por salto de lineas
-    //$segundo = array_filter($primero,'trim');//eliminar elementos vacios del array
-    $tercero = array_map('trim',$primero); // limpiar los caracteres en blanco de los elementos
+    $primero = preg_split("/[\n]+/",$v_archivo_rtf_limpio); // Romper el string en elementos por salto de lineas.
+    //$segundo = array_filter($primero,'trim');				// Eliminar elementos vacios del array.
+    $tercero = array_map('trim', $primero); 				// Limpiar los caracteres en blanco de los elementos.
 
 
     $cabecera = array();
@@ -58,7 +59,7 @@
             echo  'entro';
             $cabecera['resultado'] = 'NEGATIVO';
         }
-        //resultado
+        // Resultado.
         if(!isset($cabecera['resultado'])){
             if(strpos(strtolower($elemento) ,'aprobado')!== false){
                 $cabecera['resultado'] = 'AFIRMATIVO';
@@ -100,10 +101,13 @@
                     break;
               }
               $votaciones['totales'][$key]=$cantidad;
-           }
-        }
+         }
+   	}
 
-    print_r($cabecera);
-    print_r($votaciones);
-  
+    //print_r($cabecera);
+   	// print_r($votaciones);
+   	
+    // Llama a la funcion generarCSV
+    generarCSV($cabecera, $votaciones);
+
     //header('Location: '.'subido.html');
