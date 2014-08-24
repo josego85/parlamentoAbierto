@@ -1,4 +1,9 @@
 <?php
+/*
+ * parsear resultado votacion camara diputados
+* @author Juan Bauer bauerpy@gmail.com
+ * @author Jose Gonzales 
+ */
 class limpiarArchivoRTF{
 	// Function that checks whether the data are the on-screen text.
 	// It works in the following way:
@@ -35,16 +40,16 @@ class limpiarArchivoRTF{
 	
 					// If it is another backslash or nonbreaking space or hyphen,
 					// then the character is plain text and add it to the output stream.
-					if ($nc == '\\' && rtf_isPlainText($stack[$j])) $document .= '\\';
-					elseif ($nc == '~' && rtf_isPlainText($stack[$j])) $document .= ' ';
-					elseif ($nc == '_' && rtf_isPlainText($stack[$j])) $document .= '-';
+					if ($nc == '\\' && $this->rtf_isPlainText($stack[$j])) $document .= '\\';
+					elseif ($nc == '~' && $this->rtf_isPlainText($stack[$j])) $document .= ' ';
+					elseif ($nc == '_' && $this->rtf_isPlainText($stack[$j])) $document .= '-';
 					// If it is an asterisk mark, add it to the stack.
 					elseif ($nc == '*') $stack[$j]["*"] = true;
 					// If it is a single quote, read next two characters that are the hexadecimal notation
 					// of a character we should add to the output stream.
 					elseif ($nc == "'") {
 						$hex = substr($text, $i + 2, 2);
-						if (rtf_isPlainText($stack[$j]))
+						if ($this->rtf_isPlainText($stack[$j]))
 							$document .= html_entity_decode("&#".hexdec($hex).";");
 						//Shift the pointer.
 						$i += 2;
@@ -122,7 +127,7 @@ class limpiarArchivoRTF{
 								break;
 						}
 						// Add data to the output stream if required.
-						if (rtf_isPlainText($stack[$j]))
+						if ($this->rtf_isPlainText($stack[$j]))
 							$document .= $toText;
 					}
 	
@@ -143,7 +148,7 @@ class limpiarArchivoRTF{
 				case '\0': case '\r': case '\f': case '\n': break;
 				// Add other data to the output stream if required.
 				default:
-					if (rtf_isPlainText($stack[$j]))
+					if ($this->rtf_isPlainText($stack[$j]))
 						$document .= $c;
 					break;
 			}
