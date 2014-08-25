@@ -13,38 +13,41 @@
 		
 		// Nombre de tablas de Google Table Fusion.
 		$v_nombre_tabla_diputados = '1i_gDiq1mcYIGoVrA6Kst3fEGvMN6RH2z366C-eW0';
-		$v_nombre_bloque_diputados = '1v7GscZrDxlscNy9FbC_dAK7Hl_EKYGL89k9-o8l7';
+		$v_nombre_tabla_bloque_diputados = '1v7GscZrDxlscNy9FbC_dAK7Hl_EKYGL89k9-o8l7';
+		$v_nombre_tabla_asuntos_diputados = "1PrZjdHMRMBmD1gMf2o8n-ul51eTF32rxG5Z1axYB";
 		
 		// Se obtiene el json de la Tabla diputados.
 		$v_json_diputados = "https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20*%20FROM%20" . $v_nombre_tabla_diputados ."&key=" . $v_api_key_google_table_fusion;
 		
 		// Se obtiene el json de la Tabla bloque diputados.
-		$v_json_bloque_diputados = "https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20*%20FROM%20" . $v_nombre_bloque_diputados ."&key=" . $v_api_key_google_table_fusion;
+		$v_json_bloque_diputados = "https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20*%20FROM%20" . $v_nombre_tabla_bloque_diputados ."&key=" . $v_api_key_google_table_fusion;
+		
+		// Se obtiene el json de la Tabla asuntos diputados.
+		$v_json_asuntos_diputados = "https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20asuntoId%20FROM%20" . $v_nombre_tabla_asuntos_diputados ."%20ORDER%20BY%20asuntoId%20DESC%20LIMIT%201&key=" . $v_api_key_google_table_fusion;
 		
 		// Convierte el json de diputados a un array de diputados.
 		$v_array_diputados = json_decode(file_get_contents($v_json_diputados), true);
 		
-		
 		// Convierte el json de bloque diputados a un array de bloque diputados.
 		$v_array_bloque_diputados = json_decode(file_get_contents($v_json_bloque_diputados, true));
 		
+		// Convierte el json de asuntos diputados a un array de asuntos diputados.
+		$v_array_asuntos_diputados = json_decode(file_get_contents($v_json_asuntos_diputados, true));
 		
-		//print_r($p_votaciones);
-
 		
 		// Generar votaciones diputados en un archivo CSV.
 		
 		// Valores de votacion de los diputados.
 		// - 0 = Afirmativo
 		// - 1 = Negativo
-		// - 2 = Abstención
+		// - 2 = Abstencion
 		// - 3 = Ausente
-		
-		$v_caracter_separador = ",";
-		$v_archivo_votaciones_csv = "votaciones-diputados.csv";
+		$v_caracter_separador = "|";
+		$v_path_archivos_generados = "../archivosGenerados/";
+		$v_archivo_votaciones_csv = $v_path_archivos_generados . "votaciones-diputados.csv";
 		$v_cabecera_archivo_votaciones_csv = "asuntoId" . $v_caracter_separador . "diputadoId" . 
 		    $v_caracter_separador . "bloqueId" . $v_caracter_separador ."voto \n";
-		$v_asuntoId = "1";
+		$v_asuntoId = $v_array_asuntos_diputados->rows[0][0] + 1;
 		
 		if(!$handle = fopen($v_archivo_votaciones_csv, "w")){
 			echo "No puede abrir el archivo: " . $v_archivo_votaciones_csv;
@@ -70,6 +73,12 @@
 								case 'si':
 									$v_voto = 0;		// El valor 0 indica afirmativo.
 									break;
+								case 'no':
+									$v_voto = 1;		// El valor 1 indica negativo.
+									break;
+								case 'abstencion':
+									$v_voto = 2;		// El valor 2 indica abstencion.
+									break;
 								case 'ausentes':
 									$v_voto = 3;		// El valor 3 indica ausente.
 									break;
@@ -89,11 +98,9 @@
 		}
 		fclose($handle);
 		
-		
-		
+
 		// Generar asuntos diputados en un archivo CSV.
-		$v_caracter_separador = ",";
-		$v_archivo_asuntos_votaciones_csv = "asuntos-diputados.csv";
+		$v_archivo_asuntos_votaciones_csv = $v_path_archivos_generados . "asuntos-diputados.csv";
 		$v_cabecera_archivo_asuntos_votaciones_csv = "asuntoId" . $v_caracter_separador. "sesion" .
 		    $v_caracter_separador . "asunto" . $v_caracter_separador . "ano" . $v_caracter_separador .
 		    "fecha" . $v_caracter_separador . "hora" . $v_caracter_separador . "base" . $v_caracter_separador .
@@ -115,11 +122,10 @@
 		//print_r($p_cabecera);
 		//print_r($p_votaciones);
 		
-		//echo "Asunto: " . $p_cabecera['asunto'] . "\n";
+		
 		
 		$v_sesion = "";
 		$v_asunto = $p_cabecera['asunto'];
-		$v_asunto = "";
 		$v_ano = $p_cabecera['ano'];
 		$v_fecha= $p_cabecera['fecha'];
 		$v_hora = $p_cabecera['hora'];

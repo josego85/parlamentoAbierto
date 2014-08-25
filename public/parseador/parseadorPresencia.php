@@ -17,7 +17,6 @@
     //$segundo = array_filter($primero,'trim');				// Eliminar elementos vacios del array.
     $tercero = array_map('trim', $primero); 				// Limpiar los caracteres en blanco de los elementos.
 
-
     $cabecera = array();
     $votaciones = array();
     $key = 'otros';
@@ -105,7 +104,7 @@
    	}
 
     //print_r($cabecera);
-   	// print_r($votaciones);
+   	//print_r($votaciones);
    	
     // Llama a la funcion generarCSV
     generarCSV($cabecera, $votaciones);
