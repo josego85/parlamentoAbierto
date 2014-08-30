@@ -1,4 +1,5 @@
 <?php
+//     header('Content-Type: text/html; charset=UTF-8');
 	/**
  	 * @param Array $p_cabecera
  	 * @param Array $p_votaciones
@@ -56,6 +57,8 @@
 			exit;
 		}
 		
+//print_r($p_votaciones);
+//print_r($v_array_diputados);
 		foreach($p_votaciones['totales'] as $v_resultado => $v_valor){
 		   if(!empty($p_votaciones[$v_resultado])){
 			foreach($p_votaciones[$v_resultado] as $v_nombre_diputados){
@@ -168,6 +171,17 @@
 			// - Posicion 1 => nombre
 			// - Posicion 2 => distrito
 			// - Posicion 3 => id_bloque
+//echo mb_detect_encoding($v_diputado[1]);
+//if(mb_detect_encoding($p_nombre_diputado) != 'UTF-8'){
+//$p_nombre_diputado = utf8_encode($p_nombre_diputado);
+//}
+//if(mb_detect_encoding($v_diputado[1]) != 'UTF-8'){
+$v_diputado[1] = utf8_decode($v_diputado[1]);
+//}
+//echo "p_nombre diputado: ". $p_nombre_diputado;
+//echo "<br>p_nombre diputado1: ".$v_diputado[1];
+
+
 			if($v_diputado[1] == $p_nombre_diputado){
 				
 				$v_obj_diputado = new stdClass();

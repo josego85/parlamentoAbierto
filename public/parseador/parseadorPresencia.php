@@ -1,7 +1,7 @@
 <?php
     require 'limpiarArchivoRTF.php';
     require 'generarCSV.php';
-    require '../lib/Encoding.php';
+  //  require '../lib/Encoding.php';
     //use "\ForceUTF8\Encoding";
 
     // Datos del archivo.
@@ -11,10 +11,10 @@
 
     $v_objeto = new limpiarArchivoRTF();
 
-    $v_encoding = new Encoding();
+//    $v_encoding = new Encoding();
 
-    $v_archivo_rtf_limpio = html_entity_decode($v_objeto->rtf2text($name), ENT_QUOTES);
-    $v_archivo_rtf_limpio = $v_encoding->fixUTF8($v_archivo_rtf_limpio);
+    $v_archivo_rtf_limpio = $v_objeto->rtf2text($name);
+ //   $v_archivo_rtf_limpio = $v_encoding->fixUTF8($v_archivo_rtf_limpio);
     unlink(getcwd().'/'.$name);
     $primero = preg_split("/[\n]+/",$v_archivo_rtf_limpio); // Romper el string en elementos por salto de lineas.
     //$segundo = array_filter($primero,'trim');				// Eliminar elementos vacios del array.
@@ -105,9 +105,10 @@
    	}
 
     //print_r($cabecera);
-   //	print_r($votaciones);
+   	//print_r($votaciones);
    	
     // Llama a la funcion generarCSV
     generarCSV($cabecera, $votaciones);
 
+//print_r($votaciones);
     header('Location: '.'subido.html');
