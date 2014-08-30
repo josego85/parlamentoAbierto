@@ -1,9 +1,15 @@
 <center>
     <br>
     <br>
-    <p>Subir votos diputados</p>
+    <p>Convertir votos diputados</p>
 <form action="parseadorPresencia.php" method="post" enctype="multipart/form-data">
 <input type="file" name="votacion" />
+Resutlado:
+<select name="resultado">
+  <option value="AFIRMATIVO">AFIRMATIVO</option>
+  <option value="NEGATIVO">NEGATIVO</option>
+  <option value="ANULADA">ANULADA</option>
+</select>
 <input type="submit" value="Subir" />
 </form>
 </center>

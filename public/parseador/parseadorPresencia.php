@@ -1,7 +1,6 @@
 <?php
     require 'limpiarArchivoRTF.php';
     require 'generarCSV.php';
-    
     // Datos del archivo.
     $tmp_name = $_FILES["votacion"]["tmp_name"];
     $name = $_FILES["votacion"]["name"];
@@ -9,10 +8,8 @@
 
     $v_objeto = new limpiarArchivoRTF();
 
-    $v_archivo_rtf_limpio = utf8_decode($v_objeto->rtf2text($name));
-
+    $v_archivo_rtf_limpio = html_entity_decode($v_objeto->rtf2text($name), ENT_QUOTES, 'UTF-8');
     unlink(getcwd().'/'.$name);
-
     $primero = preg_split("/[\n]+/",$v_archivo_rtf_limpio); // Romper el string en elementos por salto de lineas.
     //$segundo = array_filter($primero,'trim');				// Eliminar elementos vacios del array.
     $tercero = array_map('trim', $primero); 				// Limpiar los caracteres en blanco de los elementos.
@@ -54,12 +51,9 @@
             }
             continue;
         }
-        if(strpos(strtolower($elemento) ,'rechazado')){
-            echo  'entro';
-            $cabecera['resultado'] = 'NEGATIVO';
-        }
         // Resultado.
-        if(!isset($cabecera['resultado'])){
+        $cabecera['resultado']=$_POST['resultado'];
+      /*  if(!isset($cabecera['resultado'])){
             if(strpos(strtolower($elemento) ,'aprobado')!== false){
                 $cabecera['resultado'] = 'AFIRMATIVO';
             }elseif(strpos(strtolower($elemento) ,'rechazado')!== false){
@@ -68,12 +62,13 @@
                  $cabecera['resultado'] = 'ANULADA';
             }
             continue;
+        }*/
+
+        if (empty($elemento)) {
+            continue;
         }
 
-        if(empty($elemento))
-           continue;
-
-        // Votos.
+    // Votos.
         if($cantidad > 0){
             $cantidad--;
             $votaciones[$key][] = $elemento;
@@ -104,9 +99,9 @@
    	}
 
     //print_r($cabecera);
-   	//print_r($votaciones);
+   //	print_r($votaciones);
    	
     // Llama a la funcion generarCSV
     generarCSV($cabecera, $votaciones);
 
-    //header('Location: '.'subido.html');
+    header('Location: '.'subido.html');

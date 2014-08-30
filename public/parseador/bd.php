@@ -15,7 +15,6 @@ class bd{
         $client->setDeveloperKey($apiKey);
         $service = new Google_Service_Fusiontables($client);
 
-        $service->
     }
     
 }

@@ -6,7 +6,6 @@
  	 * @return void
  	 */
 	function generarCSV($p_cabecera, $p_votaciones){
-		header("Content-Type: text/html; charset=utf-8");
 		
 		// API Key de Google Table Fusion.
 		$v_api_key_google_table_fusion = 'AIzaSyDICo1qGOtGnd0DD3QEY_rQ2_xcFGLNYto';
@@ -44,12 +43,12 @@
 		// - 3 = Ausente
 		$v_caracter_separador = "|";
 		$v_path_archivos_generados = "../archivosGenerados/";
-		$v_archivo_votaciones_csv = $v_path_archivos_generados . "votaciones-diputados.csv";
+		$v_archivo_votaciones_csv = $v_path_archivos_generados . "votos-diputados.csv";
 		$v_cabecera_archivo_votaciones_csv = "asuntoId" . $v_caracter_separador . "diputadoId" . 
 		    $v_caracter_separador . "bloqueId" . $v_caracter_separador ."voto \n";
 		$v_asuntoId = $v_array_asuntos_diputados->rows[0][0] + 1;
 		
-		if(!$handle = fopen($v_archivo_votaciones_csv, "w")){
+		if(!$handle = fopen($v_archivo_votaciones_csv, "w+")){
 			echo "No puede abrir el archivo: " . $v_archivo_votaciones_csv;
 			exit;
 		}
@@ -59,48 +58,41 @@
 		}
 		
 		foreach($p_votaciones['totales'] as $v_resultado => $v_valor){
-			switch($v_resultado){
-				case 'si':
-				case 'ausentes':
-					foreach($p_votaciones[$v_resultado] as $v_nombre_diputados){
-						$v_obj_diputado = devolverObjDiputado($v_array_diputados, $v_nombre_diputados);
-						
-						if(!empty($v_obj_diputado)){
-							$v_diputado_id = $v_obj_diputado->diputadoID;
-							$v_bloque_id = $v_obj_diputado->id_bloque;
-							
-							switch($v_resultado){
-								case 'si':
-									$v_voto = 0;		// El valor 0 indica afirmativo.
-									break;
-								case 'no':
-									$v_voto = 1;		// El valor 1 indica negativo.
-									break;
-								case 'abstencion':
-									$v_voto = 2;		// El valor 2 indica abstencion.
-									break;
-								case 'ausentes':
-									$v_voto = 3;		// El valor 3 indica ausente.
-									break;
-							}
+                    foreach($p_votaciones[$v_resultado] as $v_nombre_diputados){
+                        $v_obj_diputado = devolverObjDiputado($v_array_diputados, $v_nombre_diputados);
+                        if(!empty($v_obj_diputado)){
+                            $v_diputado_id = $v_obj_diputado->diputadoID;
+                            $v_bloque_id = $v_obj_diputado->id_bloque;
 
-							$v_fila_votacion_diputado = $v_asuntoId . $v_caracter_separador . $v_diputado_id . 
-							    $v_caracter_separador . $v_bloque_id . $v_caracter_separador . $v_voto . "\n";
+                            switch($v_resultado){
+                                case 'si':
+                                    $v_voto = 0;		// El valor 0 indica afirmativo.
+                                    break;
+                                case 'no':
+                                    $v_voto = 1;		// El valor 1 indica negativo.
+                                    break;
+                                case 'abstencion':
+                                    $v_voto = 2;		// El valor 2 indica abstencion.
+                                    break;
+                                case 'ausentes':
+                                    $v_voto = 3;		// El valor 3 indica ausente.
+                                    break;
+                            }
+                            $v_fila_votacion_diputado = $v_asuntoId . $v_caracter_separador . $v_diputado_id . 
+                                $v_caracter_separador . $v_bloque_id . $v_caracter_separador . $v_voto . "\n";
 
-							if(fwrite($handle, utf8_decode($v_fila_votacion_diputado)) === FALSE){
-								echo "No puede escribir en el archivo: " . $v_archivo_votaciones_csv;
-								exit;
-							}
-						}
-					}
-					break;
-			}
+                            if(fwrite($handle, utf8_decode($v_fila_votacion_diputado)) === FALSE){
+                                echo "No puede escribir en el archivo: " . $v_archivo_votaciones_csv;
+                                exit;
+                            }
+                        }
+                    }
 		}
 		fclose($handle);
 		
 
 		// Generar asuntos diputados en un archivo CSV.
-		$v_archivo_asuntos_votaciones_csv = $v_path_archivos_generados . "asuntos-diputados.csv";
+		$v_archivo_asuntos_votaciones_csv = $v_path_archivos_generados . "asunto-diputados.csv";
 		$v_cabecera_archivo_asuntos_votaciones_csv = "asuntoId" . $v_caracter_separador. "sesion" .
 		    $v_caracter_separador . "asunto" . $v_caracter_separador . "ano" . $v_caracter_separador .
 		    "fecha" . $v_caracter_separador . "hora" . $v_caracter_separador . "base" . $v_caracter_separador .
@@ -108,9 +100,9 @@
 		    $v_caracter_separador . "presentes" . $v_caracter_separador . "ausentes" . $v_caracter_separador .
 		    "abstenciones" . $v_caracter_separador . "afirmativos" . $v_caracter_separador . "negativos" .
 		    $v_caracter_separador . "votopresidente" . $v_caracter_separador . "titulo \n";
-		$v_asuntoId = "1";
+
 		
-		if(!$handle = fopen($v_archivo_asuntos_votaciones_csv, "w")){
+            if(!$handle = fopen($v_archivo_asuntos_votaciones_csv, "w+")){
 			echo "No puede abrir el archivo: " . $v_archivo_asuntos_votaciones_csv;
 			exit;
 		}
@@ -158,6 +150,7 @@
 			exit;
 		}
 		fclose($handle);
+                return;
 	}
 
 	
