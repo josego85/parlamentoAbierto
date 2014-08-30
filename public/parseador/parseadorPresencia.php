@@ -8,7 +8,7 @@
 
     $v_objeto = new limpiarArchivoRTF();
 
-    $v_archivo_rtf_limpio = html_entity_decode($v_objeto->rtf2text($name), ENT_QUOTES, 'UTF-8');
+    $v_archivo_rtf_limpio = html_entity_decode($v_objeto->rtf2text($name), ENT_QUOTES);
     unlink(getcwd().'/'.$name);
     $primero = preg_split("/[\n]+/",$v_archivo_rtf_limpio); // Romper el string en elementos por salto de lineas.
     //$segundo = array_filter($primero,'trim');				// Eliminar elementos vacios del array.
