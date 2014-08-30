@@ -1,37 +1,23 @@
-# Década Votada
+# Parlamento Abierto
 
-[`www.decadavotada.com.ar`](http://www.decadavotada.com.ar/)
 
-Esta aplicación muestra las más de 3.000 votaciones nominales de las Cámara de Diputados (2001-2013) y Senadores de la Nación Argentina (2004-2012) de acuerdo a las actas oficiales (diputados y senadores).
-
-Comenzó a desarrollarse en el Hackatón sobre D3.js organizado por Hack/Hackers Buenos Aires, en abril de 2013.
 
 ## TODO
 
-* Buscador por ley
-* Mostrar última votación por default
-* Ir a votacion por id desde url (para poder hacer referencia a una votación desde, por ejemplo, un mail o tweet)
-* Mejorar orden de bloques (para que siempre queden primero, en cada cuadrante, los bloques con más miembros)
-* Fijar tooltip
-* Elegir licencia
-* Borrar archivos no usados/duplicados
-* Disclaimer (por posibles errores involuntarios)
+* Completar desarrolladores y colaboradores
+* Subir automaticamente los datos a google drive
 
-### Desarrollado por
+##Installacion
 
-* Andy Tow
-* Gonzalo Bellver
-* Luciano Amor
-* Martín Szyszlican
 
-### Colaboradores
+##Cargar asunto y votación.
 
-* Teresa Alberto
-* Mariela Duarte
-* Yamila García
-* Sonia Jalfin
-* Amalín Ramos
-* Olivia Sohr
-* Agustín Telado
-* Alfredo Ramírez
-* Thalis Kalfigkopoulos
+1- Descargar el documento rtf
+2- Subirlo con la herramienta  http://misitio.org/parseador/subir-diputados.html
+3- Marcar el resultado del asunto (afirmativo, rechazado, anulado).
+3- Descargar los csv generados para asunto y votación.
+4- Subir estos csv a las tablas correspondientes en google drive utilizando como separador el caracter | (pipe).
+5- Repetir el proceso por cada asunto.
+
+Obs. importante subir los csv al google drive antes de procesar el siguiente asunto, pues el asuntoid va incrementando a la ultima obtenida de la tabla en google drive.
+
