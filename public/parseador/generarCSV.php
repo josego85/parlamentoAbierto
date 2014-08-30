@@ -1,5 +1,4 @@
 <?php
-
 	/**
  	 * @param Array $p_cabecera
  	 * @param Array $p_votaciones
