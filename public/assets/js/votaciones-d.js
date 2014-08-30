@@ -11,7 +11,7 @@ var Votaciones = function(settings) {
         { index: 0, name: "0", bounds: {x0: 0, y0:0}, countX: 0, countY: 0, title: "Afirmativos"},
         { index: 1, name: "1", bounds: {x0: width/2, y0:0}, countX: 0, countY: 0, title: "Negativos"},
         { index: 2, name: "2", bounds: {x0: 0, y0:height/2}, countX: 0, countY: 0, title: "Abstenciones"},
-        { index: 3, name: "3", bounds: {x0: width/2, y0:height/2}, countX: 0, countY: 0, title: "Ausentes"},
+        { index: 3, name: "3", bounds: {x0: width/2, y0:height/2}, countX: 0, countY: 0, title: "Ausentes"}
     ];
 
     var dotRadius = 10;
@@ -28,9 +28,9 @@ var Votaciones = function(settings) {
         .range([height, 0]);
 
     var color = d3.scale.linear()
-        .range(["white", "black"])
+        .range(["white", "black"]);
 
-    var ftClient = new FTClient('AIzaSyDICo1qGOtGnd0DD3QEY_rQ2_xcFGLNYto');
+    var ftClient = new FTClient(API_KEY_GOOGLE_TABLE_FUSION);
 
     svg = d3.select("#cuadrantes").append("svg")
         .attr("width", width + margin.left + margin.right)
@@ -54,30 +54,30 @@ var Votaciones = function(settings) {
     // Diputados
     ftClient.query({
         fields: ["*"],
-        table: "1i_gDiq1mcYIGoVrA6Kst3fEGvMN6RH2z366C-eW0"      // Tabla diputados.
+        table: NOMBE_TABLA_DIPUTADOS      // Tabla diputados.
     }, function(rows) {
         congressmen = rows.map(function(row) {
             return {
                 diputadoId: row[0],
                 nombre: row[1],
                 distrito: row[2]
-            }
-        })
+            };
+        });
     });
 
     // Bloques
     ftClient.query({
         fields: ["*"],
-        table: "1v7GscZrDxlscNy9FbC_dAK7Hl_EKYGL89k9-o8l7"      // Tabla bloque diputados.
+        table: NOMBRE_TABLA_BLOQUE_DIPUTADOS      // Tabla bloque diputados.
     }, function(rows) {
-        color.domain([1, rows.filter(function(row) { return !row[2]}).length]);
+        color.domain([1, rows.filter(function(row) { return !row[2];}).length]);
         blocks = rows.map(function(row) {
             return {
                 bloqueId: row[0],
                 bloque: row[1],
                 color: row[2] ? row[2] : color(row[0])
-            }
-        })
+            };
+        });
 
     });
 
@@ -85,7 +85,7 @@ var Votaciones = function(settings) {
         // Votaciones
         ftClient.query({
             fields: ["*"],
-            table: "1qS1osYKCLGO-2b4AmaDvR4FQGIWPmIAJ9Aq1iMaC",     // Tabla votaciones diputados
+            table: NOMBRE_TABLA_VOTACIONES_DIPUTADOS,     // Tabla votaciones diputados
             tail: "WHERE asuntoId = '" + asuntoId + "'"
         }, function(rows) {
             data = rows.map(function(row) {
@@ -94,12 +94,12 @@ var Votaciones = function(settings) {
                     diputadoId: row[1],
                     bloqueId: row[2],
                     voto: row[3]
-                }
-            })
+                };
+            });
             showTabs();
             update(asuntoId, success);
         });
-    }
+    };
 
     votaciones.color = color;
 
@@ -133,7 +133,7 @@ var Votaciones = function(settings) {
             })
             .attr("r", dotRadius-1)
             .attr("fill", function(d) {
-                return blocks.filter(function(block) { return block.bloqueId == d.bloqueId})[0].color;
+                return blocks.filter(function(block) { return block.bloqueId == d.bloqueId;})[0].color;
             })
             .attr("cx", function(d) {
                 var xIni = quadrants[d.voto].bounds.x0 + 5;
@@ -168,18 +168,18 @@ var Votaciones = function(settings) {
                         ;
                         $(".tooltip-inner").html(content);
                     }
-                }
+                };
             });
         if (success) {
             success.apply(null);
         }
     }
     function getBlock(blockId) {
-        return blocks.filter(function(bloque) { return bloque.bloqueId == blockId })[0];
+        return blocks.filter(function(bloque) { return bloque.bloqueId == blockId; })[0];
     }
 
     function getCongressman(congressmanId) {
-        return congressmen.filter(function(diputado) { return diputado.diputadoId == congressmanId })[0];
+        return congressmen.filter(function(diputado) { return diputado.diputadoId == congressmanId; })[0];
     }
 
     function getSortedData(thedata) {
@@ -190,4 +190,4 @@ var Votaciones = function(settings) {
     }
 
     return votaciones;
-}
+};
