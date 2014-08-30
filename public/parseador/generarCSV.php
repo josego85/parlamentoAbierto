@@ -57,35 +57,37 @@
 		}
 		
 		foreach($p_votaciones['totales'] as $v_resultado => $v_valor){
-                    foreach($p_votaciones[$v_resultado] as $v_nombre_diputados){
-                        $v_obj_diputado = devolverObjDiputado($v_array_diputados, $v_nombre_diputados);
-                        if(!empty($v_obj_diputado)){
-                            $v_diputado_id = $v_obj_diputado->diputadoID;
-                            $v_bloque_id = $v_obj_diputado->id_bloque;
+		    if($v_valor){
+			foreach($p_votaciones[$v_resultado] as $v_nombre_diputados){
+                            $v_obj_diputado = devolverObjDiputado($v_array_diputados, $v_nombre_diputados);
+                            if(!empty($v_obj_diputado)){
+                                $v_diputado_id = $v_obj_diputado->diputadoID;
+                                $v_bloque_id = $v_obj_diputado->id_bloque;
 
-                            switch($v_resultado){
-                                case 'si':
-                                    $v_voto = 0;		// El valor 0 indica afirmativo.
-                                    break;
-                                case 'no':
-                                    $v_voto = 1;		// El valor 1 indica negativo.
-                                    break;
-                                case 'abstencion':
-                                    $v_voto = 2;		// El valor 2 indica abstencion.
-                                    break;
-                                case 'ausentes':
-                                    $v_voto = 3;		// El valor 3 indica ausente.
-                                    break;
-                            }
-                            $v_fila_votacion_diputado = $v_asuntoId . $v_caracter_separador . $v_diputado_id . 
-                                $v_caracter_separador . $v_bloque_id . $v_caracter_separador . $v_voto . "\n";
+                                switch($v_resultado){
+                                    case 'si':
+                                        $v_voto = 0;		// El valor 0 indica afirmativo.
+                                        break;
+                                    case 'no':
+                                        $v_voto = 1;		// El valor 1 indica negativo.
+                                        break;
+                                    case 'abstencion':
+                                        $v_voto = 2;		// El valor 2 indica abstencion.
+                                        break;
+                                    case 'ausentes':
+                                        $v_voto = 3;		// El valor 3 indica ausente.
+                                        break;
+                                }
+                                $v_fila_votacion_diputado = $v_asuntoId . $v_caracter_separador . $v_diputado_id . 
+                                    $v_caracter_separador . $v_bloque_id . $v_caracter_separador . $v_voto . "\n";
 
-                            if(fwrite($handle, utf8_decode($v_fila_votacion_diputado)) === FALSE){
-                                echo "No puede escribir en el archivo: " . $v_archivo_votaciones_csv;
-                                exit;
+                                if(fwrite($handle, utf8_decode($v_fila_votacion_diputado)) === FALSE){
+                                    echo "No puede escribir en el archivo: " . $v_archivo_votaciones_csv;
+                                    exit;
+                                }
                             }
                         }
-                    }
+		    }
 		}
 		fclose($handle);
 		
