@@ -57,7 +57,7 @@
 		}
 		
 		foreach($p_votaciones['totales'] as $v_resultado => $v_valor){
-		    if($v_valor){
+		   if($p_votaciones[$v_resultado] != 0){
 			foreach($p_votaciones[$v_resultado] as $v_nombre_diputados){
                             $v_obj_diputado = devolverObjDiputado($v_array_diputados, $v_nombre_diputados);
                             if(!empty($v_obj_diputado)){
