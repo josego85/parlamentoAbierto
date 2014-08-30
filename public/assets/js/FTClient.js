@@ -2,13 +2,13 @@ var FTClient = function(apiKey) {
 
     var ftClient = {
         apiKey: apiKey
-    }
+    };
 
     ftClient.query = function(query, success) {
 
         var url = this.getUrl(query);
 
-        console.log("Querying " + url + "...");
+        //console.log("Querying " + url + "...");
         $.ajax({
             url: url,
             dataType: 'jsonp',
@@ -17,7 +17,7 @@ var FTClient = function(apiKey) {
                 success.call(null, rows);
             }
         });
-    }
+    };
 
     ftClient.getUrl = function(query) {
         var queryStr =
@@ -32,7 +32,7 @@ var FTClient = function(apiKey) {
         url.push('&callback=?');
 
         return url.join('');
-    }
+    };
 
     return ftClient;
-}
+};

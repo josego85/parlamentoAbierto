@@ -84,7 +84,7 @@ function getCheckedBlocks() {
     $('.chk-bloque:checked').each(function() {
         blocksChecked.push($(this).val());
     });
-    console.log(blocksChecked);
+    //console.log(blocksChecked);
 }
 function setCheckedBlocks() {
     if(congressmenChecked.length + blocksChecked.length == 0) {
@@ -112,7 +112,7 @@ function getCheckedCongressmen() {
     $('.chk-diputado:checked').each(function() {
         congressmenChecked.push($(this).val());
     });
-    console.log(congressmenChecked);
+   //console.log(congressmenChecked);
 }
 function setCheckedCongressmen() {
     if(congressmenChecked.length + blocksChecked.length == 0) {

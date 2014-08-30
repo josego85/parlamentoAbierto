@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 // The app
 var app = angular.module('votaciones', ['votaciones.services', 'votaciones.controllers', 'votaciones.filters']);
@@ -11,8 +11,8 @@ services.factory('Selection', function() {
         year: null,
         date: null,
         file : null
-    }
-})
+    };
+});
 
 // The filters
 var filters = angular.module('votaciones.filters', []);
@@ -25,31 +25,30 @@ filters.filter('truncate', [function() {
             s_ = toLong ? text.substr(0,n-1) : text;
         s_ = useWordBoundary && toLong ? s_.substr(0,s_.lastIndexOf(' ')) : s_;
         return  toLong ? s_ + '...' : s_;
-    }
-}])
+    };
+}]);
 
 // The controllers
 var controllers = angular.module('votaciones.controllers', ['votaciones.services']);
 
 controllers.controller('SelectionController', ['$scope', '$filter', 'Selection', function($scope, $filter, Selection) {
     $scope.selection = Selection;
-    //var ftClient = new FTClient('AIzaSyCkG_rrZyBE2C9VJQVGhmJ2y_AVByUA4sc');
-    var ftClient = new FTClient('AIzaSyDICo1qGOtGnd0DD3QEY_rQ2_xcFGLNYto');
+    var ftClient = new FTClient(API_KEY_GOOGLE_TABLE_FUSION);
 
     $scope.viz = new Votaciones();
     $scope.vizShown = false;
 
     var yearsQuery = {
         fields:['ano'],
-        table: '1PrZjdHMRMBmD1gMf2o8n-ul51eTF32rxG5Z1axYB',     // Tabla asuntos diputados.
+        table: NOMBRE_TABLA_ASUNTOS_DIPUTADOS,     // Tabla asuntos diputados.
         tail: 'GROUP BY ano ORDER BY ano'
     };
 
     ftClient.query(yearsQuery, function(rows) {
-        $scope.years = rows.map(function(row) { return row[0] });
+        $scope.years = rows.map(function(row) { return row[0]; });
         $scope.$apply();
         selectDefaultVotacion();
-    })
+    });
 
     $scope.selectYear = function(year, success) {
         $scope.selection.year = year;
@@ -62,17 +61,17 @@ controllers.controller('SelectionController', ['$scope', '$filter', 'Selection',
 
         var datesQuery = {
             fields:['fecha'],
-            table: '1PrZjdHMRMBmD1gMf2o8n-ul51eTF32rxG5Z1axYB',     // Tabla asuntos diputados.
+            table: NOMBRE_TABLA_ASUNTOS_DIPUTADOS,     // Tabla asuntos diputados.
             tail: 'WHERE ano="' + year + '" GROUP BY fecha ORDER BY fecha'
-        }
+        };
         ftClient.query(datesQuery, function(rows) {
-            $scope.dates = rows.map(function(row) { return Date.parse(row[0])});
+            $scope.dates = rows.map(function(row) { return Date.parse(row[0]);});
             if (success) {
                 success.apply(null);
             }
             $scope.$apply();
-        })
-    }
+        });
+    };
 
     $scope.selectDate = function(date, success) {
         $scope.selection.date = date;
@@ -85,23 +84,23 @@ controllers.controller('SelectionController', ['$scope', '$filter', 'Selection',
 
         var filesQuery = {
             fields:['asunto', 'asuntoId', 'titulo'],
-            table: '1PrZjdHMRMBmD1gMf2o8n-ul51eTF32rxG5Z1axYB',     // Tabla asuntos diputados.
+            table: NOMBRE_TABLA_ASUNTOS_DIPUTADOS,     // Tabla asuntos diputados.
             tail: "WHERE fecha = '" + $date(date, 'MM/dd/yyyy') + "' ORDER BY hora"
-        }
+        };
         ftClient.query(filesQuery, function(rows) {
             $scope.files = rows.map(function(row) {
                 return {
                     name: row[0],
                     id: row[1],
                     titulo: row[2]
-                }
+                };
             });
             if (success) {
                 success.apply(null);
             }
             $scope.$apply();
-        })
-    }
+        });
+    };
 
     $scope.selectFile = function(file, success) {
         getCheckedBlocks();
@@ -110,9 +109,9 @@ controllers.controller('SelectionController', ['$scope', '$filter', 'Selection',
         $scope.selection.file = file;
         var fileQuery = {
             fields:['*'],
-            table: '1PrZjdHMRMBmD1gMf2o8n-ul51eTF32rxG5Z1axYB',     // Tabla asuntos diputados.
+            table: NOMBRE_TABLA_ASUNTOS_DIPUTADOS,     // Tabla asuntos diputados.
             tail: "WHERE asuntoId = '" + file.id + "'"
-        }
+        };
 
         var lastFile = false,
             firstFile = false;
@@ -150,7 +149,7 @@ controllers.controller('SelectionController', ['$scope', '$filter', 'Selection',
                     negativos: row[14],
                     negativos_p: (parseInt(row[14]) / (parseInt(row[12]) + parseInt(row[13]) + parseInt(row[14])) * 100).toFixed(1),
                     votopresidente: row[15]
-                }
+                };
             })[0];
             $scope.vizShown = true;
             $scope.viz.showVote(file.id, success);
@@ -166,14 +165,14 @@ controllers.controller('SelectionController', ['$scope', '$filter', 'Selection',
         // Blocks
         ftClient.query({
             fields: ['bloqueId', 'COUNT()'],
-            table: '1qS1osYKCLGO-2b4AmaDvR4FQGIWPmIAJ9Aq1iMaC',     // Tabla votaciones diputados.
+            table: NOMBRE_TABLA_VOTACIONES_DIPUTADOS,     // Tabla votaciones diputados.
             tail: "WHERE asuntoId = '" + file.id + "' GROUP BY bloqueId ORDER BY COUNT() DESC"
         }, function(rows) {
-            var blockOrder = rows.map(function(row) { return row[0] });
-            var blockMembers = rows.map(function(row) { return row[1] });
+            var blockOrder = rows.map(function(row) { return row[0];});
+            var blockMembers = rows.map(function(row) { return row[1];});
             ftClient.query({
                 fields: ['*'],
-                table: '1v7GscZrDxlscNy9FbC_dAK7Hl_EKYGL89k9-o8l7'  // Tabla Diputados.
+                table: NOMBRE_TABLA_BLOQUE_DIPUTADOS  // Tabla Bloque Diputados.
             }, function(rows) {
                 $scope.blocks = rows
                     .map(function(row) {
@@ -183,30 +182,30 @@ controllers.controller('SelectionController', ['$scope', '$filter', 'Selection',
                             color: row[2] ? row[2] : $scope.viz.color(row[0]),
                             order: blockOrder.indexOf(row[0]),
                             members: blockMembers[blockOrder.indexOf(row[0])]
-                        }
+                        };
                     })
                     .filter(function(block) {
                         return block.order >= 0;
                     })
                     .sort(function(a,b) {
                         return a.order - b.order;
-                    })
+                    });
 
                 $scope.$apply();
                 setCheckedBlocks();
-            })
-        })
+            });
+        });
         // congressmen
         ftClient.query({
             fields: ['diputadoId', 'voto'],
-            table: '1qS1osYKCLGO-2b4AmaDvR4FQGIWPmIAJ9Aq1iMaC',     // Tabla votaciones diputados.
+            table: NOMBRE_TABLA_VOTACIONES_DIPUTADOS,     // Tabla votaciones diputados.
             tail: "WHERE asuntoId = '" + file.id + "'"
         }, function(rows) {
-            var congressmenOrder = rows.map(function(row) { return row[0] });
-			var congressmenVote = rows.map(function(row) { return row[1] });
+            var congressmenOrder = rows.map(function(row) { return row[0];});
+			var congressmenVote = rows.map(function(row) { return row[1];});
             ftClient.query({
                 fields: ['*'],
-                table: '1i_gDiq1mcYIGoVrA6Kst3fEGvMN6RH2z366C-eW0',     // Tabla Diputados.
+                table: NOMBE_TABLA_DIPUTADOS,     // Tabla Diputados.
                 tail: "ORDER BY nombre ASC"
             }, function(rows) {
                 $scope.cmen = rows
@@ -217,40 +216,40 @@ controllers.controller('SelectionController', ['$scope', '$filter', 'Selection',
 							distrito: row[2],
                             order: congressmenOrder.indexOf(row[0]),
 							vote: congressmenVote[congressmenOrder.indexOf(row[0])]
-                        }
+                        };
                     })
                     .filter(function(cmen) {
                         return cmen.order >= 0;
-                    })
+                    });
 
                 $scope.$apply();
                 setCheckedCongressmen();
-            })
-        })
-    }
+            });
+        });
+    };
 
     $scope.play = function() {
         if (!$scope.lastFile) {
             $scope.playing = true;
             selectNextFile();
         }
-    }
+    };
 
     $scope.pause = function() {
         $scope.playing = false;
-    }
+    };
 
     $scope.prev = function() {
         if (!$scope.firstFile) {
             selectPrevFile();
         }
-    }
+    };
 
     $scope.next = function() {
         if (!$scope.lastFile) {
             selectNextFile();
         }
-    }
+    };
 
 /*
     function selectNextFile() {
@@ -391,7 +390,7 @@ controllers.controller('SelectionController', ['$scope', '$filter', 'Selection',
         }
         else {
             var hash = window.location.href.substring(indexHash+1).split('.');
-            hash.map(function(d) { return parseInt(d) });
+            hash.map(function(d) { return parseInt(d);});
             // valido hash: 3 parametros y years (dates y files no estan definidos, valido despues)
             if(hash.length != 3 || hash[0] < 0 || hash[1] < 0 || hash[2] < 0 || hash[0] >= $scope.years.length) {
                 selectLastFile();
@@ -415,7 +414,7 @@ controllers.controller('SelectionController', ['$scope', '$filter', 'Selection',
         if(indexHash !== -1) {
             url = url.substring(0, indexHash);
         }
-        return url + '?' + $scope.years.indexOf($scope.selection.year) + '.' + $scope.dates.indexOf($scope.selection.date) + '.' + $scope.files.indexOf($scope.selection.file)
+        return url + '?' + $scope.years.indexOf($scope.selection.year) + '.' + $scope.dates.indexOf($scope.selection.date) + '.' + $scope.files.indexOf($scope.selection.file);
     }
 
-}])
+}]);
