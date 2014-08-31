@@ -7,7 +7,12 @@
 * Completar desarrolladores y colaboradores
 * Subir automaticamente los datos a google drive
 
-##Installacion
+
+##Documentaci&oacute;n
+http://misitio.org//public/doc.html
+
+
+##Installaci&oacute;n
 Requisitos para tener en funcionando en un servidor:
 * Php 5
 
