@@ -27,5 +27,6 @@ Pasos:
 * Repetir el proceso por cada asunto.
 
 <strong>OBS</strong>: 
-<br>Subir los csv al google drive antes de procesar el siguiente asunto, pues el asuntoid va incrementando a la ultima obtenida de la tabla en google drive.
+<br>
+* Subir los csv al google drive antes de procesar el siguiente asunto, pues el asuntoid va incrementando a la ultima obtenida de la tabla en google drive.
 
