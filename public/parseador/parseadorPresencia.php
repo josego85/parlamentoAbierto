@@ -115,7 +115,7 @@
          }
    	}
 
-    print_r($cabecera);
+        //print_r($cabecera);
    	//print_r($votaciones);
    	
     // Llama a la funcion generarCSV
