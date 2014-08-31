@@ -38,11 +38,11 @@
 
 		// Se obtiene el mes y el dia, porque en Google Table fusion debe ser MM/dd/yyyy
                 // y en los documentos estan como dd/MM/yyyy
-                $v_dia = substr($v_fecha_hora[0],0,2);
+                 = substr($v_fecha_hora[0],0,2);
                 $v_mes = substr($v_fecha_hora[0],3,2);
                 $v_ano = substr($v_fecha_hora[0],6,4);
 
-                $cabecera['fecha'] = $v_dia . "/". $v_mes . "/" . $v_ano;
+                $cabecera['fecha'] = $v_mes . "/". $v_dia . "/" . $v_ano;
                 $cabecera['hora'] = $v_fecha_hora[1];
                 $cabecera['ano'] = $v_ano;  
                 continue;
