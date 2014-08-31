@@ -26,6 +26,6 @@ Pasos:
 * Subir estos csv a las tablas correspondientes en google drive utilizando como separador el caracter | (pipe).
 * Repetir el proceso por cada asunto.
 
-OBS: 
-<br>importante subir los csv al google drive antes de procesar el siguiente asunto, pues el asuntoid va incrementando a la ultima obtenida de la tabla en google drive.
+<strong>OBS</strong>: 
+<br>Subir los csv al google drive antes de procesar el siguiente asunto, pues el asuntoid va incrementando a la ultima obtenida de la tabla en google drive.
 
