@@ -45,12 +45,15 @@ controllers.controller('SelectionController', ['$scope', '$filter', 'Selection',
     };
 
     ftClient.query(yearsQuery, function(rows) {
-        $scope.years = rows.map(function(row) { return row[0]; });
+        $scope.years = rows.map(function(row) { 
+            return row[0]; });
         $scope.$apply();
         selectDefaultVotacion();
     });
 
     $scope.selectYear = function(year, success) {
+        
+        //console.log("year: ", year);
         $scope.selection.year = year;
         $scope.selection.date = null;
         $scope.dates = null;
@@ -64,8 +67,11 @@ controllers.controller('SelectionController', ['$scope', '$filter', 'Selection',
             table: NOMBRE_TABLA_ASUNTOS_DIPUTADOS,     // Tabla asuntos diputados.
             tail: 'WHERE ano="' + year + '" GROUP BY fecha ORDER BY fecha'
         };
+        //console.log("datesQuery: ", datesQuery);
+        
         ftClient.query(datesQuery, function(rows) {
-            $scope.dates = rows.map(function(row) { return Date.parse(row[0]);});
+            $scope.dates = rows.map(function(row) { 
+                return Date.parse(row[0]);});
             if (success) {
                 success.apply(null);
             }
@@ -74,6 +80,8 @@ controllers.controller('SelectionController', ['$scope', '$filter', 'Selection',
     };
 
     $scope.selectDate = function(date, success) {
+        
+        console.log("date: ", date);
         $scope.selection.date = date;
         $scope.selection.file = null;
         $scope.files = null;

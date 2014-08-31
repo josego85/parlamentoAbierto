@@ -30,10 +30,21 @@
         // Fecha hora.
         if(!isset($cabecera['fecha'])){
             if(preg_match('/([0-9]{2})\/([0-9]{2})\/([0-9]{4})/', substr($elemento,0,10))==1){
-                $cabecera['fecha'] = preg_split("/[\s]+/",$elemento);
-                $cabecera['hora'] = $cabecera['fecha'][1];
-                $cabecera['fecha'] = $cabecera['fecha'][0];
-                $cabecera['ano'] = substr($cabecera['fecha'], 6,4);  
+                $v_fecha_hora = preg_split("/[\s]+/",$elemento);
+
+                // $v_fecha_hora:
+                // $v_fecha_hora[0] -> fecha.
+                // $v_fecha_hora[1] -> hora. 
+
+		// Se obtiene el mes y el dia, porque en Google Table fusion debe ser MM/dd/yyyy
+                // y en los documentos estan como dd/MM/yyyy
+                $v_dia = substr($v_fecha_hora[0],0,2);
+                $v_mes = substr($v_fecha_hora[0],3,2);
+                $v_ano = substr($v_fecha_hora[0],6,4);
+
+                $cabecera['fecha'] = $v_dia . "/". $v_mes . "/" . $v_ano;
+                $cabecera['hora'] = $v_fecha_hora[1];
+                $cabecera['ano'] = $v_ano;  
                 continue;
             }
         }      
@@ -104,7 +115,7 @@
          }
    	}
 
-    //print_r($cabecera);
+    print_r($cabecera);
    	//print_r($votaciones);
    	
     // Llama a la funcion generarCSV
