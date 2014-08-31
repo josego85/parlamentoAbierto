@@ -8,7 +8,14 @@
 * Subir automaticamente los datos a google drive
 
 ##Installacion
+Requisitos para tener en funcionando en un servidor:
+- Php 5
 
+Pasos:
+1.- git clone https://github.com/proyectosbeta/parlamentoAbierto.git
+2.- Cambiar los nombres de las tablas de Google Table Fusion en <b>parlamentoAbierto/public/assets/js/Constantes.js</b> y <b>parlamentoAbierto/public/parseador/constantes.php</b>.
+3.- Crear las 4 tablas (bloques-diputados, diputados, asuntos-diputados, votaciones-diputados) en Google Table FUSION con sus respectivos campos.
+4.- Darle acceso público a las 4 tablas anteriores.
 
 ##Cargar asunto y votación.
 
