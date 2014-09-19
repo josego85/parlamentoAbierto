@@ -1,4 +1,8 @@
 <?php
+/*
+ *adaptacion a api v1 @bauerpy Juan Bauer
+ *   */
+
 
 function GoogleClientLogin($username, $password, $service) { 
         // Check that we have all the parameters 
