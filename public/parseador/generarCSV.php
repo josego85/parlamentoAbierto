@@ -1,6 +1,6 @@
 <?php
     require 'constantes.php';
-
+    require "php_ft_lib.php";
 	/**
  	 * @param Array $p_cabecera
  	 * @param Array $p_votaciones
