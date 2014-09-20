@@ -8,7 +8,7 @@
  	 * @return void
  	 */
 	function insertarGoogleTableFusion($p_cabecera, $p_votaciones){
-                // Se obtiene el json de la Tabla diputados.
+        // Se obtiene el json de la Tabla diputados.
 		$v_json_diputados = "https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20*%20FROM%20" . NOMBRE_TABLA_DIPUTADOS ."&key=" . API_KEY_GOOGLE_TABLE_FUSION;
 		
 		// Se obtiene el json de la Tabla bloque diputados.
@@ -45,11 +45,12 @@
 		// - 1 = Negativo
 		// - 2 = Abstencion
 		// - 3 = Ausente
+		$v_query = "";
 		foreach($p_votaciones['totales'] as $v_resultado => $v_valor){
 		   if(!empty($p_votaciones[$v_resultado])){
 		       foreach($p_votaciones[$v_resultado] as $v_nombre_diputados){
                    $v_obj_diputado = devolverObjDiputado($v_array_diputados, $v_nombre_diputados);
-                  echo "contador: ";
+                  //echo "contador: ";
 
                    if(!empty($v_obj_diputado)){
                        $v_diputado_id = $v_obj_diputado->diputadoID;
@@ -72,12 +73,15 @@
                        $v_valores_votacion_diputado = "(" . $v_asuntoId . $v_caracter_separador . $v_diputado_id . 
                            $v_caracter_separador . $v_bloque_id . $v_caracter_separador . $v_voto . ")";
 					
-                       $v_query = "INSERT INTO $tableid (asuntoId, diputadoId, bloqueId, voto) VALUES " . $v_valores_votacion_diputado;
-                       $v_result = $ft->query($v_query);
+                       $v_query.= "INSERT INTO $tableid (asuntoId, diputadoId, bloqueId, voto) VALUES " . $v_valores_votacion_diputado . ";";
                    }
                }
 		    }
 		}
+		//echo "v_query". $v_query;
+		//die();
+		$v_result = $ft->query($v_query);
+		
 
 		$v_sesion = "";
 		$v_asunto = $p_cabecera['asunto'];
