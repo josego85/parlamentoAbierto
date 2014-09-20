@@ -8,7 +8,7 @@ var FTClient = function(apiKey) {
 
         var url = this.getUrl(query);
 
-        console.log("Querying " + url + "...");
+        //console.log("Querying " + url + "...");
         $.ajax({
             url: url,
             dataType: 'jsonp',
