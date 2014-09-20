@@ -56,7 +56,7 @@ class FusionTable {
                 // Otherwise we are going to be updating the table, so we need to the POST method 
                 else if(preg_match("/^update|^delete|^insert|^create/i", $query)) { 
                         // Set up the cURL 
-                        echo $query;
+                        //echo $query;
                         $body = "sql=" . urlencode($query)."&key=".$this->key; 
                       /*  $body = array (
                             "sql"=>urlencode($query),

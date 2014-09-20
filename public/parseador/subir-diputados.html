@@ -1,15 +1,16 @@
 <center>
     <br>
     <br>
-    <p>Convertir votos diputados</p>
-<form action="parseador.php" method="post" enctype="multipart/form-data">
-<input type="file" name="votacion" />
-Resultado:
-<select name="resultado">
-  <option value="AFIRMATIVO">AFIRMATIVO</option>
-  <option value="NEGATIVO">NEGATIVO</option>
-  <option value="ANULADA">ANULADA</option>
-</select>
-<input type="submit" value="Subir" />
-</form>
+    <p><h1>Subir votos diputados</h1></p>
+    <div id = "load" style = "display: none;">Enviando... Espere un momento</div>
+	<form action="parseador.php" method="post" enctype="multipart/form-data">
+	<input type="file" name="votacion" />
+	Resultado:
+	<select name="resultado">
+	    <option value="AFIRMATIVO">AFIRMATIVO</option>
+	    <option value="NEGATIVO">NEGATIVO</option>
+	    <option value="ANULADA">ANULADA</option>
+	</select>
+	<input type="submit" value="Subir" onclick="this.value='Enviando...'; this.disabled='disabled'; this.form.submit();"/>
+	</form>
 </center>

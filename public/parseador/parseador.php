@@ -7,6 +7,12 @@
     $tmp_name = $_FILES["votacion"]["tmp_name"];
     $name = $_FILES["votacion"]["name"];
     move_uploaded_file($tmp_name, getcwd().'/'.$name);
+    
+    if($name == ""){
+    	echo "<br><br><center><h1>No ha subido ning&uacute;n archivo.<h1></center>";
+    	echo "<center><a href = 'subir-diputados.html'>Subir</a></center>";
+    	return;
+    }
 
     $v_objeto = new limpiarArchivoRTF();
 
@@ -113,7 +119,6 @@
               $votaciones['totales'][$key]=$cantidad;
          }
    	}
-
     //print_r($cabecera);
    	//print_r($votaciones);
    	
@@ -123,5 +128,9 @@
     // Llama a la funcion insertarGoogleTableFusion
     insertarGoogleTableFusion($cabecera, $votaciones);
     
-    //echo "Se ha subido correctamente.";
-    //header('Location: '.'subido.html');
+    // Redirecciona automaticamente.
+    header('Location: '.'subido.html');
+    
+
+    // Cuando no se ejecuta el redireccionamiento.
+    exit;
