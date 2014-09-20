@@ -74,7 +74,7 @@
             continue;
         }
         // Resultado.
-        $cabecera['resultado']=$_POST['resultado'];
+        $cabecera['resultado'] = $_POST['resultado'];
       /*  if(!isset($cabecera['resultado'])){
             if(strpos(strtolower($elemento) ,'aprobado')!== false){
                 $cabecera['resultado'] = 'AFIRMATIVO';
@@ -85,6 +85,9 @@
             }
             continue;
         }*/
+        
+        // Presidente.
+        $cabecera['presidente'] = $_POST['presidente'];
 
         if (empty($elemento)) {
             continue;

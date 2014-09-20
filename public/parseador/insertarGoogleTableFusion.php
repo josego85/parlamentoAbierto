@@ -91,7 +91,7 @@
 		$v_base = "";
 		$v_mayoria = "";
 		$v_resultado = $p_cabecera['resultado'];
-		$v_presidente = "";
+		$v_presidente = utf8_decode($p_cabecera['presidente']);
 		
 		// Se suma la cantidad de si, no, abstencion para los presentes.
 		$v_presentes = $p_votaciones['totales']['si'] +  $p_votaciones['totales']['no'] + $p_votaciones['totales']['abstencion'];
