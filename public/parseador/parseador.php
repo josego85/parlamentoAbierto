@@ -91,7 +91,7 @@
         }*/
         
         // Presidente.
-        $cabecera['presidente'] = $_POST['presidente'];
+        $cabecera['presidente'] = utf8_decode($_POST['presidente']);
 
         if (empty($elemento)) {
             continue;
@@ -126,7 +126,7 @@
               $votaciones['totales'][$key]=$cantidad;
          }
    	}
-    //print_r($cabecera);
+        // print_r($cabecera);
    	//print_r($votaciones);
    	
     // Llama a la funcion generarCSV

@@ -47,15 +47,16 @@
 		// - 3 = Ausente
        
 		$v_query = "";
-            $v_sesion = "";
-		$v_asunto = $p_cabecera['asunto'];
+                $v_sesion = "";
+		//$v_asunto = preg_replace('/&[*]\;/',' ',utf8_encode($p_cabecera['asunto']));  
+		$v_asunto = utf8_encode($p_cabecera['asunto']);
 		$v_ano = $p_cabecera['ano'];
 		$v_fecha = $p_cabecera['fecha'];
 		$v_hora = $p_cabecera['hora'];
 		$v_base = "";
 		$v_mayoria = "";
 		$v_resultado = $p_cabecera['resultado'];
-		$v_presidente = utf8_decode($p_cabecera['presidente']);
+		$v_presidente = utf8_encode($p_cabecera['presidente']);
 		
 		// Se suma la cantidad de si, no, abstencion para los presentes.
 		$v_presentes = $p_votaciones['totales']['si'] +  $p_votaciones['totales']['no'] + $p_votaciones['totales']['abstencion'];
@@ -82,7 +83,7 @@
 		    presentes, ausentes, abstenciones, afirmativos, negativos, votopresidente, titulo) VALUES " . $v_fila_asuntos_votacion_diputado;
 		
                 $v_result = $ft->query($v_query);
-                print_r($v_result);
+               // print_r($v_result);
                 if(!isset($v_result[7])){     
                      
                     return false;
