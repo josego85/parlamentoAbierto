@@ -2,6 +2,10 @@
     require 'limpiarArchivoRTF.php';
     //require 'generarCSV.php';
     require 'insertarGoogleTableFusion.php';
+    session_start();
+    	if(!$_SESSION['logged']){
+            header('Location: '.'salir.php');
+        }
 
     // Datos del archivo.
     $tmp_name = $_FILES["votacion"]["tmp_name"];
@@ -132,7 +136,7 @@
     insertarGoogleTableFusion($cabecera, $votaciones);
     
     // Redirecciona automaticamente.
-    header('Location: '.'subido.html');
+    header('Location: '.'subido.php');
     
 
     // Cuando no se ejecuta el redireccionamiento.

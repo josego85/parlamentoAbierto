@@ -1,0 +1,38 @@
+<?php
+require "php_ft_lib.php";
+session_start();
+if(!$_SESSION['logged']){
+    if(!empty($_POST['user']) && !empty($_POST['pass'])){
+        $token = GoogleClientLogin($_POST['user'], $_POST['pass'], "fusiontables");
+      // print_r(substr($token,0,5));
+       // die();
+        if(substr($token,0,5)!="Error"){
+            
+            $_SESSION['logged'] = true;
+            $_SESSION['token'] = $token;
+            header('Location: '.'subir-diputados.php');
+            
+        }else{
+            echo "<center>
+                    <br>
+                    <br>
+                    <h1>Usuario y/o password erroneos</h1>
+                    <br>
+                    <a href='index.php'>Volver a intentar</a>
+                    </center>";
+        }
+    }else{
+        echo "<center>
+                    <br>
+                    <br>
+                    <h1>Ingresar</h1>";
+        echo "<form action='' method='post' enctype='multipart/form-data'>";
+        echo "<br><div style=' width: 250px;'>";
+        echo "<p style='float: right;'>Usuario: <input type='text' name='user'></p>
+                <p style='float: right;'>Password: <input type='password' name='pass'></p>";
+        echo "<input type='submit' value='Entrar' />";
+        echo "</div></form></center>";
+    }
+}else{
+     header('Location: '.'subir-diputados.php');
+}

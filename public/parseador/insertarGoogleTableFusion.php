@@ -1,7 +1,7 @@
 <?php
-    require "php_ft_lib.php";
-	require "constantes.php";
-	
+    require_once "php_ft_lib.php";
+	require_once "constantes.php";
+
 	/**
  	 * @param Array $p_cabecera
  	 * @param Array $p_votaciones
@@ -29,13 +29,13 @@
 		$v_asuntoId = $v_array_asuntos_diputados->rows[0][0] + 1;
 		//$v_asuntoId = 1;
 		
-		$tableid = NOMBRE_TABLA_VOTACIONES_DIPUTADOS;
-		$username = USERNAME_GOOGLE;
-		$password = PASSWORD_USERNAME_GOOGLE;
+		//$tableid = NOMBRE_TABLA_VOTACIONES_DIPUTADOS;
+		//$username = USERNAME_GOOGLE;
+		//$password = PASSWORD_USERNAME_GOOGLE;
 		$key = API_KEY_GOOGLE_TABLE_FUSION;
 		
-		$token = GoogleClientLogin($username, $password, "fusiontables");
-		
+		//$token = GoogleClientLogin($username, $password, "fusiontables");
+		$token = $_SESSION['token'];
 		$ft = new FusionTable($token, $key);
 		
 		$v_caracter_separador = ",";
@@ -45,14 +45,71 @@
 		// - 1 = Negativo
 		// - 2 = Abstencion
 		// - 3 = Ausente
+       
 		$v_query = "";
+            $v_sesion = "";
+		$v_asunto = $p_cabecera['asunto'];
+		$v_ano = $p_cabecera['ano'];
+		$v_fecha = $p_cabecera['fecha'];
+		$v_hora = $p_cabecera['hora'];
+		$v_base = "";
+		$v_mayoria = "";
+		$v_resultado = $p_cabecera['resultado'];
+		$v_presidente = utf8_decode($p_cabecera['presidente']);
+		
+		// Se suma la cantidad de si, no, abstencion para los presentes.
+		$v_presentes = $p_votaciones['totales']['si'] +  $p_votaciones['totales']['no'] + $p_votaciones['totales']['abstencion'];
+		
+		$v_ausentes = $p_votaciones['totales']['ausentes'];
+		$v_abstenciones = $p_votaciones['totales']['abstencion'];
+		$v_afirmativos = $p_votaciones['totales']['si'];
+		$v_negativos = $p_votaciones['totales']['no']; 
+                  
+		$v_votopresidente = "";
+		$v_titulo = "";
+		
+		// Los datos de la fila a insertar (asunto-diputado).
+		$v_fila_asuntos_votacion_diputado = "(" . "'". $v_asunto . "'". $v_caracter_separador . "'". $v_ano . "'". $v_caracter_separador . "'". $v_fecha . "'".
+		    $v_caracter_separador . "'". $v_hora . "'". $v_caracter_separador . "'". $v_base . "'". $v_caracter_separador . "'". $v_mayoria . "'".
+		    $v_caracter_separador . "'". $v_resultado . "'". $v_caracter_separador . "'". $v_presidente . "'". $v_caracter_separador . "'". $v_presentes . "'".
+		    $v_caracter_separador . "'". $v_ausentes . "'". $v_caracter_separador . "'". $v_abstenciones . "'". $v_caracter_separador . "'". $v_afirmativos . "'".
+		    $v_caracter_separador . "'". $v_negativos . "'". $v_caracter_separador . "'". $v_votopresidente . "'".$v_caracter_separador . "'". 
+		    $v_titulo . "'". ")";
+		
+		// Insert
+		$tableid = NOMBRE_TABLA_ASUNTOS_DIPUTADOS;
+		$v_query = "INSERT INTO $tableid ( asunto,ano, fecha, hora, base, mayoria, resultado, presidente, 
+		    presentes, ausentes, abstenciones, afirmativos, negativos, votopresidente, titulo) VALUES " . $v_fila_asuntos_votacion_diputado;
+		
+                $v_result = $ft->query($v_query);
+                print_r($v_result);
+                if(!isset($v_result[7])){     
+                     
+                    return false;
+                }
+		$v_asuntoId = json_decode($v_result[7]);
+        
+   
+        
+                $v_query = "update $tableid set asuntoId = '$v_asuntoId' where rowid = '$v_asuntoId'";
+                
+                $result = $ft->query($v_query);
+                
+                $v_query = '';
 		foreach($p_votaciones['totales'] as $v_resultado => $v_valor){
 		   if(!empty($p_votaciones[$v_resultado])){
 		       foreach($p_votaciones[$v_resultado] as $v_nombre_diputados){
                    $v_obj_diputado = devolverObjDiputado($v_array_diputados, $v_nombre_diputados);
                   //echo "contador: ";
 
-                   if(!empty($v_obj_diputado)){
+;
+		
+
+		
+		//print_r($v_result);
+        
+                    $tableid = NOMBRE_TABLA_VOTACIONES_DIPUTADOS;
+                          if(!empty($v_obj_diputado)){
                        $v_diputado_id = $v_obj_diputado->diputadoID;
                        $v_bloque_id = $v_obj_diputado->id_bloque;
 
@@ -81,44 +138,7 @@
 		//echo "v_query". $v_query;
 		//die();
 		$v_result = $ft->query($v_query);
-		
-
-		$v_sesion = "";
-		$v_asunto = $p_cabecera['asunto'];
-		$v_ano = $p_cabecera['ano'];
-		$v_fecha = $p_cabecera['fecha'];
-		$v_hora = $p_cabecera['hora'];
-		$v_base = "";
-		$v_mayoria = "";
-		$v_resultado = $p_cabecera['resultado'];
-		$v_presidente = utf8_decode($p_cabecera['presidente']);
-		
-		// Se suma la cantidad de si, no, abstencion para los presentes.
-		$v_presentes = $p_votaciones['totales']['si'] +  $p_votaciones['totales']['no'] + $p_votaciones['totales']['abstencion'];
-		
-		$v_ausentes = $p_votaciones['totales']['ausentes'];
-		$v_abstenciones = $p_votaciones['totales']['abstencion'];
-		$v_afirmativos = $p_votaciones['totales']['si'];
-		$v_negativos = $p_votaciones['totales']['no'];
-		$v_votopresidente = "";
-		$v_titulo = "";
-		
-		// Los datos de la fila a insertar (asunto-diputado).
-		$v_fila_asuntos_votacion_diputado = "(".$v_asuntoId . $v_caracter_separador . "'" .$v_sesion . "'".
-		    $v_caracter_separador . "'". $v_asunto . "'". $v_caracter_separador . "'". $v_ano . "'". $v_caracter_separador . "'". $v_fecha . "'".
-		    $v_caracter_separador . "'". $v_hora . "'". $v_caracter_separador . "'". $v_base . "'". $v_caracter_separador . "'". $v_mayoria . "'".
-		    $v_caracter_separador . "'". $v_resultado . "'". $v_caracter_separador . "'". $v_presidente . "'". $v_caracter_separador . "'". $v_presentes . "'".
-		    $v_caracter_separador . "'". $v_ausentes . "'". $v_caracter_separador . "'". $v_abstenciones . "'". $v_caracter_separador . "'". $v_afirmativos . "'".
-		    $v_caracter_separador . "'". $v_negativos . "'". $v_caracter_separador . "'". $v_votopresidente . "'".$v_caracter_separador . "'". 
-		    $v_titulo . "'". ")";
-		
-		// Insert
-		$tableid = NOMBRE_TABLA_ASUNTOS_DIPUTADOS;
-		$v_query = "INSERT INTO $tableid (asuntoId, sesion, asunto, ano, fecha, hora, base, mayoria, resultado, presidente, 
-		    presentes, ausentes, abstenciones, afirmativos, negativos, votopresidente, titulo) VALUES " . $v_fila_asuntos_votacion_diputado;
-		$v_result = $ft->query($v_query);
-		
-		//print_r($v_result);
+        
         return;
 	}
 
