@@ -4,4 +4,8 @@
 .DS_Store
 towlandia.sublime-project
 towlandia.sublime-workspace
+<<<<<<< Updated upstream
 /nbproject/private
+=======
+/nbproject/private/
+>>>>>>> Stashed changes

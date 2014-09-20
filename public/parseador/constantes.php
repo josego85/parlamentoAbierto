@@ -10,5 +10,5 @@
 	define("NOMBRE_TABLA_VOTACIONES_DIPUTADOS", "1NI2gWkeW9ZyZiQ2TmenBZr23vcUMlZFzN9KO5Zgf");
 	
 	// Cuenta de Google
-	define("USERNAME_GOOGLE", "");
-	define("PASSWORD_USERNAME_GOOGLE", "");
+	define("USERNAME_GOOGLE", "parlamentoabiertopy@gmail.com");
+	define("PASSWORD_USERNAME_GOOGLE", "@,6//5;bST");
