@@ -71,7 +71,7 @@
                            $v_caracter_separador . $v_bloque_id . $v_caracter_separador . $v_voto . ")";
 					
                        $v_query = "INSERT INTO $tableid (asuntoId, diputadoId, bloqueId, voto) VALUES " . $v_valores_votacion_diputado;
-                       $v_result = $ft->query($v_query);
+                       //$v_result = $ft->query($v_query);
                    }
                }
 		    }
@@ -110,7 +110,7 @@
 		$tableid = NOMBRE_TABLA_ASUNTOS_DIPUTADOS;
 		$v_query = "INSERT INTO $tableid (asuntoId, sesion, asunto, ano, fecha, hora, base, mayoria, resultado, presidente, 
 		    presentes, ausentes, abstenciones, afirmativos, negativos, votopresidente, titulo) VALUES " . $v_fila_asuntos_votacion_diputado;
-		$v_result = $ft->query($v_query);
+		//$v_result = $ft->query($v_query);
 		
 		//print_r($v_result);
         return;
@@ -136,9 +136,12 @@
 			//}
 			//if(mb_detect_encoding($v_diputado[1]) != 'UTF-8'){
 			$v_diputado[1] = utf8_decode($v_diputado[1]);
+			
+			//print_r($v_diputado[1]);
+			//die();
 			//}
-			//echo "p_nombre diputado: ". $p_nombre_diputado;
-			//echo "<br>p_nombre diputado1: ".$v_diputado[1];
+			echo "<br>p_nombre diputado: ". $p_nombre_diputado . "\n";
+			echo "<br>p_nombre diputado1: ".$v_diputado[1]. "\n\n";;
 
 			if($v_diputado[1] == $p_nombre_diputado){
 				$v_obj_diputado = new stdClass();
