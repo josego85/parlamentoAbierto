@@ -1,6 +1,7 @@
 <?php
     require 'limpiarArchivoRTF.php';
     require 'generarCSV.php';
+    //require 'insertarGoogleTableFusion.php';
 
     // Datos del archivo.
     $tmp_name = $_FILES["votacion"]["tmp_name"];
@@ -116,4 +117,7 @@
     // Llama a la funcion generarCSV
     generarCSV($cabecera, $votaciones);
 
+    // Llama a la funcion insertarGoogleTableFusion
+    //insertarGoogleTableFusion($cabecera, $votaciones);
+    
     header('Location: '.'subido.html');
