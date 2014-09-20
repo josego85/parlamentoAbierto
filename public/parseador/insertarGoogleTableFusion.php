@@ -8,7 +8,7 @@
  	 * @return void
  	 */
 	function insertarGoogleTableFusion($p_cabecera, $p_votaciones){
-		// Se obtiene el json de la Tabla diputados.
+                // Se obtiene el json de la Tabla diputados.
 		$v_json_diputados = "https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20*%20FROM%20" . NOMBRE_TABLA_DIPUTADOS ."&key=" . API_KEY_GOOGLE_TABLE_FUSION;
 		
 		// Se obtiene el json de la Tabla bloque diputados.
@@ -49,6 +49,8 @@
 		   if(!empty($p_votaciones[$v_resultado])){
 		       foreach($p_votaciones[$v_resultado] as $v_nombre_diputados){
                    $v_obj_diputado = devolverObjDiputado($v_array_diputados, $v_nombre_diputados);
+                  echo "contador: ";
+
                    if(!empty($v_obj_diputado)){
                        $v_diputado_id = $v_obj_diputado->diputadoID;
                        $v_bloque_id = $v_obj_diputado->id_bloque;
@@ -71,7 +73,7 @@
                            $v_caracter_separador . $v_bloque_id . $v_caracter_separador . $v_voto . ")";
 					
                        $v_query = "INSERT INTO $tableid (asuntoId, diputadoId, bloqueId, voto) VALUES " . $v_valores_votacion_diputado;
-                       //$v_result = $ft->query($v_query);
+                       $v_result = $ft->query($v_query);
                    }
                }
 		    }
@@ -110,7 +112,7 @@
 		$tableid = NOMBRE_TABLA_ASUNTOS_DIPUTADOS;
 		$v_query = "INSERT INTO $tableid (asuntoId, sesion, asunto, ano, fecha, hora, base, mayoria, resultado, presidente, 
 		    presentes, ausentes, abstenciones, afirmativos, negativos, votopresidente, titulo) VALUES " . $v_fila_asuntos_votacion_diputado;
-		//$v_result = $ft->query($v_query);
+		$v_result = $ft->query($v_query);
 		
 		//print_r($v_result);
         return;
@@ -140,8 +142,8 @@
 			//print_r($v_diputado[1]);
 			//die();
 			//}
-			echo "<br>p_nombre diputado: ". $p_nombre_diputado . "\n";
-			echo "<br>p_nombre diputado1: ".$v_diputado[1]. "\n\n";;
+		//	echo "<br>p_nombre diputado: ". $p_nombre_diputado . "\n";
+		//	echo "<br>p_nombre diputado1: ".$v_diputado[1]. "\n\n";;
 
 			if($v_diputado[1] == $p_nombre_diputado){
 				$v_obj_diputado = new stdClass();
