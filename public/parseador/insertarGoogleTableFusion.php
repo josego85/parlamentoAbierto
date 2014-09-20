@@ -1,13 +1,14 @@
 <?php
-    require 'constantes.php';
-    //require "php_ft_lib.php";
+    require "php_ft_lib.php";
+	require "constantes.php";
+	
 	/**
  	 * @param Array $p_cabecera
  	 * @param Array $p_votaciones
  	 * @return void
  	 */
-	function generarCSV($p_cabecera, $p_votaciones){
-		// Se obtiene el json de la Tabla diputados.
+	function insertarGoogleTableFusion($p_cabecera, $p_votaciones){
+        // Se obtiene el json de la Tabla diputados.
 		$v_json_diputados = "https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20*%20FROM%20" . NOMBRE_TABLA_DIPUTADOS ."&key=" . API_KEY_GOOGLE_TABLE_FUSION;
 		
 		// Se obtiene el json de la Tabla bloque diputados.
@@ -25,34 +26,32 @@
 		// Convierte el json de asuntos diputados a un array de asuntos diputados.
 		$v_array_asuntos_diputados = json_decode(file_get_contents($v_json_asuntos_diputados, true));
 		
+		$v_asuntoId = $v_array_asuntos_diputados->rows[0][0] + 1;
+		//$v_asuntoId = 1;
 		
-		// Generar votaciones diputados en un archivo CSV.
+		$tableid = NOMBRE_TABLA_VOTACIONES_DIPUTADOS;
+		$username = USERNAME_GOOGLE;
+		$password = PASSWORD_USERNAME_GOOGLE;
+		$key = API_KEY_GOOGLE_TABLE_FUSION;
+		
+		$token = GoogleClientLogin($username, $password, "fusiontables");
+		
+		$ft = new FusionTable($token, $key);
+		
+		$v_caracter_separador = ",";
 		
 		// Valores de votacion de los diputados.
 		// - 0 = Afirmativo
 		// - 1 = Negativo
 		// - 2 = Abstencion
 		// - 3 = Ausente
-		$v_caracter_separador = "|";
-		$v_path_archivos_generados = "../archivosGenerados/";
-		$v_archivo_votaciones_csv = $v_path_archivos_generados . "votos-diputados.csv";
-		$v_cabecera_archivo_votaciones_csv = "asuntoId" . $v_caracter_separador . "diputadoId" . 
-		    $v_caracter_separador . "bloqueId" . $v_caracter_separador ."voto \n";
-		$v_asuntoId = $v_array_asuntos_diputados->rows[0][0] + 1;
-		
-		if(!$handle = fopen($v_archivo_votaciones_csv, "w+")){
-			echo "No puede abrir el archivo: " . $v_archivo_votaciones_csv;
-			exit;
-		}
-		if(fwrite($handle, utf8_decode($v_cabecera_archivo_votaciones_csv)) === FALSE){
-			echo "No puede escribir en el archivo: " . $v_archivo_votaciones_csv;
-			exit;
-		}
-		
+		$v_query = "";
 		foreach($p_votaciones['totales'] as $v_resultado => $v_valor){
 		   if(!empty($p_votaciones[$v_resultado])){
 		       foreach($p_votaciones[$v_resultado] as $v_nombre_diputados){
                    $v_obj_diputado = devolverObjDiputado($v_array_diputados, $v_nombre_diputados);
+                  //echo "contador: ";
+
                    if(!empty($v_obj_diputado)){
                        $v_diputado_id = $v_obj_diputado->diputadoID;
                        $v_bloque_id = $v_obj_diputado->id_bloque;
@@ -71,49 +70,23 @@
                                 $v_voto = 3;		// El valor 3 indica ausente.
                                 break;
                        }
-                       $v_fila_votacion_diputado = $v_asuntoId . $v_caracter_separador . $v_diputado_id . 
-                           $v_caracter_separador . $v_bloque_id . $v_caracter_separador . $v_voto . "\n";
-
-                       if(fwrite($handle, utf8_decode($v_fila_votacion_diputado)) === FALSE){
-                           echo "No puede escribir en el archivo: " . $v_archivo_votaciones_csv;
-                           exit;
-                       }
+                       $v_valores_votacion_diputado = "(" . $v_asuntoId . $v_caracter_separador . $v_diputado_id . 
+                           $v_caracter_separador . $v_bloque_id . $v_caracter_separador . $v_voto . ")";
+					
+                       $v_query.= "INSERT INTO $tableid (asuntoId, diputadoId, bloqueId, voto) VALUES " . $v_valores_votacion_diputado . ";";
                    }
                }
 		    }
 		}
-		fclose($handle);
+		//echo "v_query". $v_query;
+		//die();
+		$v_result = $ft->query($v_query);
 		
 
-		// Generar asuntos diputados en un archivo CSV.
-		$v_archivo_asuntos_votaciones_csv = $v_path_archivos_generados . "asunto-diputados.csv";
-		$v_cabecera_archivo_asuntos_votaciones_csv = "asuntoId" . $v_caracter_separador. "sesion" .
-		    $v_caracter_separador . "asunto" . $v_caracter_separador . "ano" . $v_caracter_separador .
-		    "fecha" . $v_caracter_separador . "hora" . $v_caracter_separador . "base" . $v_caracter_separador .
-		    "mayoria" . $v_caracter_separador . "resultado" . $v_caracter_separador . "presidente" .
-		    $v_caracter_separador . "presentes" . $v_caracter_separador . "ausentes" . $v_caracter_separador .
-		    "abstenciones" . $v_caracter_separador . "afirmativos" . $v_caracter_separador . "negativos" .
-		    $v_caracter_separador . "votopresidente" . $v_caracter_separador . "titulo \n";
-
-		
-            if(!$handle = fopen($v_archivo_asuntos_votaciones_csv, "w+")){
-			echo "No puede abrir el archivo: " . $v_archivo_asuntos_votaciones_csv;
-			exit;
-		}
-		if(fwrite($handle, utf8_decode($v_cabecera_archivo_asuntos_votaciones_csv)) === FALSE){
-			echo "No puede escribir en el archivo: " . $v_archivo_asuntos_votaciones_csv;
-			exit;
-		}
-		
-		//print_r($p_cabecera);
-		//print_r($p_votaciones);
-		
-		
-		
 		$v_sesion = "";
 		$v_asunto = $p_cabecera['asunto'];
 		$v_ano = $p_cabecera['ano'];
-		$v_fecha= $p_cabecera['fecha'];
+		$v_fecha = $p_cabecera['fecha'];
 		$v_hora = $p_cabecera['hora'];
 		$v_base = "";
 		$v_mayoria = "";
@@ -131,20 +104,22 @@
 		$v_titulo = "";
 		
 		// Los datos de la fila a insertar (asunto-diputado).
-		$v_fila_asuntos_votacion_diputado = $v_asuntoId . $v_caracter_separador . $v_sesion .
-		$v_caracter_separador . $v_asunto . $v_caracter_separador . $v_ano . $v_caracter_separador . $v_fecha .
-		    $v_caracter_separador . $v_hora . $v_caracter_separador . $v_base . $v_caracter_separador . $v_mayoria .
-		    $v_caracter_separador . $v_resultado . $v_caracter_separador . $v_presidente . $v_caracter_separador . $v_presentes .
-		    $v_caracter_separador . $v_ausentes .$v_caracter_separador . $v_abstenciones . $v_caracter_separador . $v_afirmativos .
-		    $v_caracter_separador . $v_negativos . $v_caracter_separador . $v_votopresidente .$v_caracter_separador . 
-		    $v_titulo . "\n";
+		$v_fila_asuntos_votacion_diputado = "(".$v_asuntoId . $v_caracter_separador . "'" .$v_sesion . "'".
+		    $v_caracter_separador . "'". $v_asunto . "'". $v_caracter_separador . "'". $v_ano . "'". $v_caracter_separador . "'". $v_fecha . "'".
+		    $v_caracter_separador . "'". $v_hora . "'". $v_caracter_separador . "'". $v_base . "'". $v_caracter_separador . "'". $v_mayoria . "'".
+		    $v_caracter_separador . "'". $v_resultado . "'". $v_caracter_separador . "'". $v_presidente . "'". $v_caracter_separador . "'". $v_presentes . "'".
+		    $v_caracter_separador . "'". $v_ausentes . "'". $v_caracter_separador . "'". $v_abstenciones . "'". $v_caracter_separador . "'". $v_afirmativos . "'".
+		    $v_caracter_separador . "'". $v_negativos . "'". $v_caracter_separador . "'". $v_votopresidente . "'".$v_caracter_separador . "'". 
+		    $v_titulo . "'". ")";
 		
-		if(fwrite($handle, utf8_decode($v_fila_asuntos_votacion_diputado)) === FALSE){
-			echo "No puede escribir en el archivo: " . $v_archivo_asuntos_votaciones_csv;
-			exit;
-		}
-		fclose($handle);
-                return;
+		// Insert
+		$tableid = NOMBRE_TABLA_ASUNTOS_DIPUTADOS;
+		$v_query = "INSERT INTO $tableid (asuntoId, sesion, asunto, ano, fecha, hora, base, mayoria, resultado, presidente, 
+		    presentes, ausentes, abstenciones, afirmativos, negativos, votopresidente, titulo) VALUES " . $v_fila_asuntos_votacion_diputado;
+		$v_result = $ft->query($v_query);
+		
+		//print_r($v_result);
+        return;
 	}
 
 	
@@ -167,9 +142,12 @@
 			//}
 			//if(mb_detect_encoding($v_diputado[1]) != 'UTF-8'){
 			$v_diputado[1] = utf8_decode($v_diputado[1]);
+			
+			//print_r($v_diputado[1]);
+			//die();
 			//}
-			//echo "p_nombre diputado: ". $p_nombre_diputado;
-			//echo "<br>p_nombre diputado1: ".$v_diputado[1];
+		//	echo "<br>p_nombre diputado: ". $p_nombre_diputado . "\n";
+		//	echo "<br>p_nombre diputado1: ".$v_diputado[1]. "\n\n";;
 
 			if($v_diputado[1] == $p_nombre_diputado){
 				$v_obj_diputado = new stdClass();

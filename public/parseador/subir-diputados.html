@@ -1,15 +1,16 @@
 <center>
     <br>
     <br>
-    <p>Convertir votos diputados</p>
-<form action="parseador.php" method="post" enctype="multipart/form-data">
-<input type="file" name="votacion" />
-Resultado:
-<select name="resultado">
-  <option value="AFIRMATIVO">AFIRMATIVO</option>
-  <option value="NEGATIVO">NEGATIVO</option>
-  <option value="ANULADA">ANULADA</option>
-</select>
-<input type="submit" value="Subir" />
-</form>
+    <h1>Subir votos diputados</h1>
+    <small>El archivo se va a subir autom&aacute;ticamente a Google Table Fusion</small>
+	<form action="parseador.php" method="post" enctype="multipart/form-data">
+	<input type="file" name="votacion" />
+	Resultado:
+	<select name="resultado">
+	    <option value="AFIRMATIVO">AFIRMATIVO</option>
+	    <option value="NEGATIVO">NEGATIVO</option>
+	    <option value="ANULADA">ANULADA</option>
+	</select>
+	<input type="submit" value="Subir" onclick="this.value='Enviando...'; this.disabled='disabled'; this.form.submit();"/>
+	</form>
 </center>

@@ -1,15 +1,25 @@
 <?php
     require 'limpiarArchivoRTF.php';
-    require 'generarCSV.php';
+    //require 'generarCSV.php';
+    require 'insertarGoogleTableFusion.php';
 
     // Datos del archivo.
     $tmp_name = $_FILES["votacion"]["tmp_name"];
     $name = $_FILES["votacion"]["name"];
     move_uploaded_file($tmp_name, getcwd().'/'.$name);
+    
+    if($name == ""){
+    	echo "<br><br><center><h1>No ha subido ning&uacute;n archivo.<h1></center>";
+    	echo "<center><a href = 'subir-diputados.html'>Subir</a></center>";
+    	return;
+    }
 
     $v_objeto = new limpiarArchivoRTF();
 
     $v_archivo_rtf_limpio = $v_objeto->rtf2text($name);
+    //$v_archivo_rtf_limpio = utf8_decode($v_objeto->rtf2text($name));
+    //print_r($v_archivo_rtf_limpio);
+    //die();
     unlink(getcwd().'/'.$name);
     $primero = preg_split("/[\n]+/",$v_archivo_rtf_limpio); // Romper el string en elementos por salto de lineas.
     //$segundo = array_filter($primero,'trim');				// Eliminar elementos vacios del array.
@@ -109,11 +119,18 @@
               $votaciones['totales'][$key]=$cantidad;
          }
    	}
-
     //print_r($cabecera);
    	//print_r($votaciones);
    	
     // Llama a la funcion generarCSV
-    generarCSV($cabecera, $votaciones);
+    //generarCSV($cabecera, $votaciones);
 
+    // Llama a la funcion insertarGoogleTableFusion
+    insertarGoogleTableFusion($cabecera, $votaciones);
+    
+    // Redirecciona automaticamente.
     header('Location: '.'subido.html');
+    
+
+    // Cuando no se ejecuta el redireccionamiento.
+    exit;
