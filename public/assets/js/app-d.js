@@ -81,7 +81,7 @@ controllers.controller('SelectionController', ['$scope', '$filter', 'Selection',
 
     $scope.selectDate = function(date, success) {
         
-        console.log("date: ", date);
+        //console.log("date: ", date);
         $scope.selection.date = date;
         $scope.selection.file = null;
         $scope.files = null;
