@@ -1,10 +1,13 @@
 <?php
     require 'limpiarArchivoRTF.php';
     //require 'generarCSV.php';
-    require 'insertarGoogleTableFusion.php';
+   // require 'insertarGoogleTableFusion.php';
+    require_once('conexion.php');
+    require 'insertar_bd.php';
     session_start();
     	if(!$_SESSION['logged']){
             header('Location: '.'salir.php');
+            exit;
         }
 
     // Datos del archivo.
@@ -12,15 +15,17 @@
     $name = $_FILES["votacion"]["name"];
     move_uploaded_file($tmp_name, getcwd().'/'.$name);
     
-    if($name == ""){
-    	echo "<br><br><center><h1>No ha subido ning&uacute;n archivo.<h1></center>";
-    	echo "<center><a href = 'subir-diputados.html'>Subir</a></center>";
+    if($name == ""||empty($_POST['presidente'])){
+        echo "<a href='salir.php'>Salir</a>";
+    	echo "<br><br><center><h1>No ha seleccionado ning&uacute;n archivo; o no ha seleccionado presidente.<h1></center>";
+    	echo "<center><a href = 'subir-diputados.php'>Subir</a></center>";
     	return;
     }
 
     $v_objeto = new limpiarArchivoRTF();
 
     $v_archivo_rtf_limpio = $v_objeto->rtf2text($name);
+    
     //$v_archivo_rtf_limpio = utf8_decode($v_objeto->rtf2text($name));
     //print_r($v_archivo_rtf_limpio);
     //die();
@@ -91,7 +96,8 @@
         }*/
         
         // Presidente.
-        $cabecera['presidente'] = utf8_decode($_POST['presidente']);
+        $cabecera['presidente'] = $_POST['presidente'];
+        $cabecera['voto_presidente'] = $_POST['votopresidente'];
 
         if (empty($elemento)) {
             continue;
@@ -133,7 +139,10 @@
     //generarCSV($cabecera, $votaciones);
 
     // Llama a la funcion insertarGoogleTableFusion
-    insertarGoogleTableFusion($cabecera, $votaciones);
+    if(!insertarBd($cabecera, $votaciones)){
+        header('Location: '.'error.php');
+        exit;
+    }
     
     // Redirecciona automaticamente.
     header('Location: '.'subido.php');

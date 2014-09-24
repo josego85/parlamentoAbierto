@@ -4,7 +4,7 @@ var FTClient = function(apiKey) {
         apiKey: apiKey
     };
 
-    ftClient.query = function(query, success) {
+    ftClient.query = function(query,success) {
 
         var url = this.getUrl(query);
 
@@ -26,7 +26,8 @@ var FTClient = function(apiKey) {
                 (query.tail ? ' ' + query.tail : '');
 
 
-        var url = ['https://www.googleapis.com/fusiontables/v1/query'];
+        //var url = ['https://www.googleapis.com/fusiontables/v1/query'];
+        var url = ['server/consultas.php'];
         url.push('?sql=' + encodeURIComponent(queryStr));
         url.push('&key=' + this.apiKey);
         url.push('&callback=?');

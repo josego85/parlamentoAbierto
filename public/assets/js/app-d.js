@@ -63,7 +63,7 @@ controllers.controller('SelectionController', ['$scope', '$filter', 'Selection',
         $('.btn-permalink').popover('hide');
 
         var datesQuery = {
-            fields:['fecha'],
+            fields:['DATE_FORMAT(fecha, "%m/%d/%Y")'],
             table: NOMBRE_TABLA_ASUNTOS_DIPUTADOS,     // Tabla asuntos diputados.
             tail: 'WHERE ano="' + year + '" GROUP BY fecha ORDER BY fecha'
         };
@@ -93,7 +93,7 @@ controllers.controller('SelectionController', ['$scope', '$filter', 'Selection',
         var filesQuery = {
             fields:['asunto', 'asuntoId', 'titulo'],
             table: NOMBRE_TABLA_ASUNTOS_DIPUTADOS,     // Tabla asuntos diputados.
-            tail: "WHERE fecha = '" + $date(date, 'MM/dd/yyyy') + "' ORDER BY hora"
+            tail: "WHERE fecha = '" + $date(date, 'yyyy-MM-dd') + "' ORDER BY hora"
         };
         ftClient.query(filesQuery, function(rows) {
             $scope.files = rows.map(function(row) {
@@ -172,9 +172,9 @@ controllers.controller('SelectionController', ['$scope', '$filter', 'Selection',
 
         // Blocks
         ftClient.query({
-            fields: ['bloqueId', 'COUNT()'],
+            fields: ['bloqueId', 'COUNT(*)'],
             table: NOMBRE_TABLA_VOTACIONES_DIPUTADOS,     // Tabla votaciones diputados.
-            tail: "WHERE asuntoId = '" + file.id + "' GROUP BY bloqueId ORDER BY COUNT() DESC"
+            tail: "WHERE asuntoId = '" + file.id + "' GROUP BY bloqueId ORDER BY COUNT(*) DESC"
         }, function(rows) {
             var blockOrder = rows.map(function(row) { return row[0];});
             var blockMembers = rows.map(function(row) { return row[1];});

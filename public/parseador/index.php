@@ -1,15 +1,15 @@
 <?php
-require "php_ft_lib.php";
+require_once  'constantes.php';
 session_start();
 if(!$_SESSION['logged']){
     if(!empty($_POST['user']) && !empty($_POST['pass'])){
-        $token = GoogleClientLogin($_POST['user'], $_POST['pass'], "fusiontables");
+        //$token = GoogleClientLogin($_POST['user'], $_POST['pass'], "fusiontables");
       // print_r(substr($token,0,5));
        // die();
-        if(substr($token,0,5)!="Error"){
-            
+        if(mysql_connect(HOST, $_POST['user'], $_POST['pass'])){
             $_SESSION['logged'] = true;
-            $_SESSION['token'] = $token;
+            $_SESSION['user'] = $_POST['user'];
+            $_SESSION['pass'] = $_POST['pass'];
             header('Location: '.'subir-diputados.php');
             
         }else{

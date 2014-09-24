@@ -8,35 +8,46 @@
  	 * @return void
  	 */
 	function insertarGoogleTableFusion($p_cabecera, $p_votaciones){
+        
+        $token = $_SESSION['token'];
+	$ft = new FusionTable($token, API_KEY_GOOGLE_TABLE_FUSION);
         // Se obtiene el json de la Tabla diputados.
-		$v_json_diputados = "https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20*%20FROM%20" . NOMBRE_TABLA_DIPUTADOS ."&key=" . API_KEY_GOOGLE_TABLE_FUSION;
-		
+		//$v_json_diputados = "https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20*%20FROM%20" . NOMBRE_TABLA_DIPUTADOS ."&key=" . API_KEY_GOOGLE_TABLE_FUSION;
+        
+                $v_consulta_diputados = "SELECT * FROM " . NOMBRE_TABLA_DIPUTADOS;
+        
 		// Se obtiene el json de la Tabla bloque diputados.
-		$v_json_bloque_diputados = "https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20*%20FROM%20" . NOMBRE_TABLA_BLOQUE_DIPUTADOS ."&key=" . API_KEY_GOOGLE_TABLE_FUSION;
+		//$v_json_bloque_diputados = "https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20*%20FROM%20" . NOMBRE_TABLA_BLOQUE_DIPUTADOS ."&key=" . API_KEY_GOOGLE_TABLE_FUSION;
 		
 		// Se obtiene el json de la Tabla asuntos diputados.
-		$v_json_asuntos_diputados = "https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20asuntoId%20FROM%20" . NOMBRE_TABLA_ASUNTOS_DIPUTADOS ."%20ORDER%20BY%20asuntoId%20DESC%20LIMIT%201&key=" . API_KEY_GOOGLE_TABLE_FUSION;
-		
+		//$v_json_asuntos_diputados = "https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20asuntoId%20FROM%20" . NOMBRE_TABLA_ASUNTOS_DIPUTADOS ."%20ORDER%20BY%20asuntoId%20DESC%20LIMIT%201&key=" . API_KEY_GOOGLE_TABLE_FUSION;
+		//$v_consulta
+        
 		// Convierte el json de diputados a un array de diputados.
-		$v_array_diputados = json_decode(file_get_contents($v_json_diputados), true);
-		
+		//$v_array_diputados = json_decode(file_get_contents($v_json_diputados), true);
+                $v_array_diputados = json_decode($ft->query($v_consulta_diputados));
+    print_r($v_consulta_diputados);
+      print_r($v_array_diputados);
+    die();
 		// Convierte el json de bloque diputados a un array de bloque diputados.
-		$v_array_bloque_diputados = json_decode(file_get_contents($v_json_bloque_diputados, true));
-		
+		//$v_array_bloque_diputados = json_decode(file_get_contents($v_json_bloque_diputados, true));
+		//
 		// Convierte el json de asuntos diputados a un array de asuntos diputados.
-		$v_array_asuntos_diputados = json_decode(file_get_contents($v_json_asuntos_diputados, true));
+		//$v_array_asuntos_diputados = json_decode(file_get_contents($v_json_asuntos_diputados, true));
 		
-		$v_asuntoId = $v_array_asuntos_diputados->rows[0][0] + 1;
+              //  $v_array_asuntos_diputados = json_decode($ft->query($v_consulta_diputados))
+        
+		//$v_asuntoId = $v_array_asuntos_diputados->rows[0][0] + 1;
 		//$v_asuntoId = 1;
 		
 		//$tableid = NOMBRE_TABLA_VOTACIONES_DIPUTADOS;
 		//$username = USERNAME_GOOGLE;
 		//$password = PASSWORD_USERNAME_GOOGLE;
-		$key = API_KEY_GOOGLE_TABLE_FUSION;
+		//$key = API_KEY_GOOGLE_TABLE_FUSION;
 		
 		//$token = GoogleClientLogin($username, $password, "fusiontables");
-		$token = $_SESSION['token'];
-		$ft = new FusionTable($token, $key);
+		//$token = $_SESSION['token'];
+		//$ft = new FusionTable($token, $key);
 		
 		$v_caracter_separador = ",";
 		

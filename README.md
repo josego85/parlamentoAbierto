@@ -15,23 +15,21 @@ http://misitio.org//public/doc.html
 ##Installaci&oacute;n
 Requisitos para tener en funcionando en un servidor:
 * Php 5
+* mysql
 
 Pasos:
 * git clone https://github.com/proyectosbeta/parlamentoAbierto.git
-* Cambiar los nombres de las tablas de Google Table Fusion en <b>parlamentoAbierto/public/assets/js/Constantes.js</b> y <b>parlamentoAbierto/public/parseador/constantes.php</b>.
-* Crear las 4 tablas (bloques-diputados, diputados, asuntos-diputados, votaciones-diputados) en Google Table FUSION con sus respectivos campos.
-* Darle acceso público a las 4 tablas anteriores.
+* crear la bd votacionespa e importar el archivo /db/votacionespa.sql
+* crear el usuario para consulta publica ejecutando el archivo /db/usuario-publico.sql
+* crear el usuario para carga ejecutando el archivo /db/usuario-carga.sql
+* Cambiar los nombres de las tablas sql <b>parlamentoAbierto/public/assets/js/Constantes.js</b>, <b>parlamentoAbierto/public/parseador/constantes.php</b> y <b>parlamentoAbierto/public/server/constantes.php</b>
 
 ##Cargar asunto y votación.
 
 * Descargar el documento rtf
-* Subirlo con la herramienta  http://misitio.org/parseador/subir-diputados.html
+* Subirlo con la herramienta  http://misitio.org/parseador/ logueandose con el usuario y contraseña de carga del mysql
 * Marcar el resultado del asunto (afirmativo, rechazado, anulado).
-* Descargar los csv generados para asunto y votación.
-* Subir estos csv a las tablas correspondientes en google drive utilizando como separador el caracter | (pipe).
+* Elegir presidente y su voto
 * Repetir el proceso por cada asunto.
 
-<strong>OBS</strong>: 
-<br>
-* Subir los csv al google drive antes de procesar el siguiente asunto, pues el asuntoid va incrementando a la ultima obtenida de la tabla en google drive.
 

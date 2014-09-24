@@ -1,11 +1,10 @@
 // API Key de Google Table Fusion.
-var API_KEY_GOOGLE_TABLE_FUSION = 'AIzaSyDXCk5wXDCvckFWZb2PLAT6PwxFkoUcmVM';
-		
+var API_KEY_GOOGLE_TABLE_FUSION = '';//solo necesario si se utilizara google ft
 // Nombre de tablas de Google Table Fusion.
-var NOMBE_TABLA_DIPUTADOS = '1hhhzjyqwT-kP4KWPhdH0P_n7MvC4JDGcr5VAmMsM';
-var NOMBRE_TABLA_BLOQUE_DIPUTADOS = '1MP1Jt-K05GNNizRGo1NIXeKLFA8FoUn3faAP87XJ';
-var NOMBRE_TABLA_ASUNTOS_DIPUTADOS = "1p1tUu1rYARXwjETyryDho2auAat0fwX9j2X4tkQp";
-var NOMBRE_TABLA_VOTACIONES_DIPUTADOS = "1NI2gWkeW9ZyZiQ2TmenBZr23vcUMlZFzN9KO5Zgf";
+var NOMBE_TABLA_DIPUTADOS = 'diputados';
+var NOMBRE_TABLA_BLOQUE_DIPUTADOS = 'bloques_diputados';
+var NOMBRE_TABLA_ASUNTOS_DIPUTADOS = 'asuntos_diputados';
+var NOMBRE_TABLA_VOTACIONES_DIPUTADOS = 'votaciones_diputados';
 
 // Google Analytics.
 var CUENTA_GOOGLE_ANALYTICS = "UA-54320781-1";
