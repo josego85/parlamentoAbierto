@@ -19,10 +19,12 @@ Requisitos para tener en funcionando en un servidor:
 
 Pasos:
 * git clone https://github.com/proyectosbeta/parlamentoAbierto.git
-* crear la bd votacionespa e importar el archivo /db/votacionespa.sql
-* crear el usuario para consulta publica ejecutando el archivo /db/usuario-publico.sql
-* crear el usuario para carga ejecutando el archivo /db/usuario-carga.sql
-* Cambiar los nombres de las tablas sql <b>parlamentoAbierto/public/assets/js/Constantes.js</b>, <b>parlamentoAbierto/public/parseador/constantes.php</b> y <b>parlamentoAbierto/public/server/constantes.php</b>
+* Crear la bd votacionespa e importar el archivo /db/votacionespa.sql
+* Crear el usuario para consulta publica ejecutando el archivo /db/usuario-publico.sql
+* Crear el usuario para carga ejecutando el archivo /db/usuario-carga.sql
+* Cambiar los nombres de las tablas sql <b>parlamentoAbierto/public/assets/js/Constantes.js</b>, <b>parlamentoAbierto/public/parseador/constantes.php</b> 
+* Colocar el usuario carga con su pass respectivo<b>parlamentoAbierto/public/server/conexion.php</b>
+* Darle permisos 777 a la carpeta parseador. (sudo chmod 777 -R parseador/)
 
 ##Cargar asunto y votación.
 
