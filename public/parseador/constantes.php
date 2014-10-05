@@ -9,5 +9,9 @@
 	define("NOMBRE_TABLA_ASUNTOS_DIPUTADOS", "asuntos_diputados");
 	define("NOMBRE_TABLA_VOTACIONES_DIPUTADOS", "votaciones_diputados");
     
-        define("BD", "votacionespa");
-        define("HOST", "localhost");
+	// Base de datos.
+    define("BD", "votacionespa");
+    define("HOST", "localhost");
+
+    // Paths
+    define("PATH_ARCHIVOS_GENERADOS", "/www/votaciones/parlamentoAbierto/public/archivosGenerados");
