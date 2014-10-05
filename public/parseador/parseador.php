@@ -13,8 +13,7 @@
     // Datos del archivo.
     $tmp_name = $_FILES["votacion"]["tmp_name"];
     $name = $_FILES["votacion"]["name"];
-    //move_uploaded_file($tmp_name, getcwd().'/'.$name);
-    move_uploaded_file($tmp_name, PATH_ARCHIVOS_GENERADOS.'/'.$name);
+    move_uploaded_file($tmp_name, getcwd().'/'.$name);
     
     if($name == ""||empty($_POST['presidente'])){
         echo "<a href='salir.php'>Salir</a>";
