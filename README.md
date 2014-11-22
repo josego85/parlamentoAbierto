@@ -23,7 +23,7 @@ Pasos:
 * Crear el usuario para consulta publica ejecutando el archivo /db/usuario-publico.sql
 * Crear el usuario para carga ejecutando el archivo /db/usuario-carga.sql
 * Cambiar los nombres de las tablas sql <b>parlamentoAbierto/public/assets/js/Constantes.js</b>, <b>parlamentoAbierto/public/parseador/constantes.php</b> 
-* Colocar el usuario carga con su pass respectivo<b>parlamentoAbierto/public/server/conexion.php</b>
+* Colocar el usuario carga con su pass respectivo <b>parlamentoAbierto/public/server/conexion.php</b>
 * Darle permisos 777 a la carpeta parseador. (sudo chmod 777 -R parseador/)
 
 ##Cargar asunto y votación.
