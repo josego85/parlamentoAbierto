@@ -11,7 +11,7 @@ if(!$_SESSION['logged']){
             $_SESSION['user'] = $_POST['user'];
             $_SESSION['pass'] = $_POST['pass'];
             header('Location: '.'subir-diputados.php');
-            
+
         }else{
             echo "<center>
                     <br>
