@@ -2,7 +2,7 @@
 /*
  * parsear resultado votacion camara diputados
 * @author Juan Bauer bauerpy@gmail.com
- * @author Jose Gonzales 
+ * @author Jose Gonzales
  */
 class limpiarArchivoRTF{
 	// Function that checks whether the data are the on-screen text.
@@ -16,13 +16,13 @@ class limpiarArchivoRTF{
 			if (!empty($s[$arrfailAt[$i]])) return false;
 		return true;
 	}
-	
+
 	function rtf2text($filename) {
 		// Read the data from the input file.
 		$text = file_get_contents($filename);
 		if (!strlen($text))
 			return "";
-	
+
 		// Create empty stack array.
 		$document = "";
 		$stack = array();
@@ -30,14 +30,14 @@ class limpiarArchivoRTF{
 		// Read the data character-by- character…
 		for ($i = 0, $len = strlen($text); $i < $len; $i++) {
 			$c = $text[$i];
-	
+
 			// Depending on current character select the further actions.
 			switch ($c) {
 				// the most important key word backslash
 				case "\\":
 					// read next character
 					$nc = $text[$i + 1];
-	
+
 					// If it is another backslash or nonbreaking space or hyphen,
 					// then the character is plain text and add it to the output stream.
 					if ($nc == '\\' && $this->rtf_isPlainText($stack[$j])) $document .= '\\';
@@ -58,7 +58,7 @@ class limpiarArchivoRTF{
 					} elseif ($nc >= 'a' && $nc <= 'z' || $nc >= 'A' && $nc <= 'Z') {
 						$word = "";
 						$param = null;
-	
+
 						// Start reading characters after the backslash.
 						for ($k = $i + 1, $m = 0; $k < strlen($text); $k++, $m++) {
 							$nc = $text[$k];
@@ -85,7 +85,7 @@ class limpiarArchivoRTF{
 						}
 						// Shift the pointer on the number of read characters.
 						$i += $m - 1;
-	
+
 						// Start analyzing what we’ve read. We are interested mostly in control words.
 						$toText = "";
 						switch (strtolower($word)) {
@@ -130,7 +130,7 @@ class limpiarArchivoRTF{
 						if ($this->rtf_isPlainText($stack[$j]))
 							$document .= $toText;
 					}
-	
+
 					$i++;
 					break;
 					// If we read the opening brace {, then new subgroup starts and we add
