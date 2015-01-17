@@ -1,11 +1,14 @@
 <?php
+ini_set('display_errors', 1); // para ke te haga display de todos los errores
 require_once  'constantes.php';
-session_start();
+if(!session_id()){
+    session_start();
+}
 require 'conexion.php';
-	if(!$_SESSION['logged']){
-            header('Location: '.'salir.php');
-            exit;
-        }
+if(!$_SESSION['logged']){
+    header('Location: '.'salir.php');
+    exit;
+}
 echo "
 <a href='salir.php'>Salir</a>
 <center>
