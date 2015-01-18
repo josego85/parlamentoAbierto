@@ -39,9 +39,16 @@
     //die();
     //unlink(getcwd().'/'.$name);
     unlink($v_ruta_completa_archivo_subido);
-    $primero = preg_split("/[\n]+/",$v_archivo_rtf_limpio); // Romper el string en elementos por salto de lineas.
-    //$segundo = array_filter($primero,'trim');				// Eliminar elementos vacios del array.
+    $primero = preg_split("/[\n]+/",$v_archivo_rtf_limpio);                         // Romper el string en elementos por salto de lineas.
+    //$segundo = array_filter($primero, 'trim');				// Eliminar elementos vacios del array.
     $tercero = array_map('trim', $primero); 				// Limpiar los caracteres en blanco de los elementos.
+
+    //print_r($segundo);
+    //die();
+
+
+    //print_r($tercero);
+    //die();
 
     $cabecera = array();
     $votaciones = array();
@@ -59,7 +66,7 @@
                 // $v_fecha_hora[0] -> fecha.
                 // $v_fecha_hora[1] -> hora.
 
-		        // Se obtiene el mes y el dia, porque en Google Table fusion debe ser MM/dd/yyyy
+	    // Se obtiene el mes y el dia, porque en Google Table fusion debe ser MM/dd/yyyy
                 // y en los documentos estan como dd/MM/yyyy
                 $v_dia = substr($v_fecha_hora[0],0,2);
                 $v_mes = substr($v_fecha_hora[0],3,2);
@@ -143,6 +150,7 @@
    } // Fin del foreach.
    //print_r($cabecera);
    //print_r($votaciones);
+   //die();
 
     // Llama a la funcion insertarBd del archivo
     if(!insertarBd($cabecera, $votaciones)){

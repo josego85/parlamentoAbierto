@@ -78,17 +78,16 @@ mysql_select_db(BD,$link) OR DIE ("Error: No es posible establecer la conexión"
                 foreach($p_votaciones[$v_resultado] as $v_nombre_diputados){
                     $v_nombre_diputados = utf8_decode($v_nombre_diputados);
                     // Parche rapido. No se porque viene un ).
-                    if(!is_array($v_nombre_diputados)){
+                    if($v_nombre_diputados != ")"){
                         $v_query1 = "select diputadoId, bloqueId from diputados where nombre = \"$v_nombre_diputados\"";
                         $result = mysql_query($v_query1);
 
-echo "<br>query: ". $v_query1;
+//echo "<br>query: ". $v_query1;
                         if(mysql_num_rows($result) <= 0){
                             mysql_query("ROLLBACK");
-                            
 //print_r($p_votaciones['totales']);
-print_r($p_votaciones);
-die();
+//print_r($p_votaciones);
+//die();
                             return false;
                         }
                         $v_obj_diputado = mysql_fetch_array($result);
@@ -110,7 +109,7 @@ die();
                                     break;
                             } // Fin del switch.
                             $v_valores_votacion_diputado = "(" . $v_asuntoId . $v_caracter_separador . $v_diputado_id .
-                            $v_caracter_separador . $v_bloque_id . $v_caracter_separador . $v_voto . ")"; 
+                            $v_caracter_separador . $v_bloque_id . $v_caracter_separador . $v_voto . ")";
                             $v_query= "INSERT INTO $table (asuntoId, diputadoId, bloqueId, voto) VALUES " . $v_valores_votacion_diputado . "; ";
                             $v_result = mysql_query($v_query) or die(mysql_error());
                             if(!$v_result){
