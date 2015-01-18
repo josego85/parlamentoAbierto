@@ -1,23 +1,16 @@
 <?php
     require 'limpiarArchivoRTF.php';
-    //require 'generarCSV.php';
-   // require 'insertarGoogleTableFusion.php';
     require_once('conexion.php');
     require 'insertar_bd.php';
     session_start();
-    	if(!$_SESSION['logged']){
-            header('Location: '.'salir.php');
-            exit;
-        }
+    if(!$_SESSION['logged']){
+        header('Location: '.'salir.php');
+        exit;
+    }
 
     // Datos del archivo.
     $tmp_name = $_FILES["votacion"]["tmp_name"];
     $name = $_FILES["votacion"]["name"];
-<<<<<<< HEAD
-    move_uploaded_file($tmp_name, getcwd().'/'.$name);
-    
-    if($name == ""||empty($_POST['presidente'])){
-=======
     //move_uploaded_file($tmp_name, getcwd().'/'.$name);
     $v_ruta_completa_archivo_subido =PATH_ARCHIVOS_GENERADOS.'/'.$name;
     $v_archivo_movido_exitosamente = move_uploaded_file($tmp_name, $v_ruta_completa_archivo_subido);
@@ -30,7 +23,6 @@
         return;
     }
     if($name == "" || empty($_POST['presidente'])){
->>>>>>> 890f9e85eeb1e448949e1a23f4bbec5bc921c863
         echo "<a href='salir.php'>Salir</a>";
         echo "<br><br><center><h1>No ha seleccionado ning&uacute;n archivo; o no ha seleccionado presidente.<h1></center>";
         echo "<center><a href = 'subir-diputados.php'>Subir</a></center>";
@@ -150,10 +142,7 @@
    //print_r($cabecera);
    //print_r($votaciones);
 
-    // Llama a la funcion generarCSV
-    //generarCSV($cabecera, $votaciones);
-
-    // Llama a la funcion insertarBd del archivo insertar_bd que se encuentra del de la carpeta parseador.
+    // Llama a la funcion insertarBd del archivo
     if(!insertarBd($cabecera, $votaciones)){
         header('Location: '.'error.php');
         exit;
@@ -161,7 +150,6 @@
 
     // Redirecciona automaticamente.
     header('Location: '.'subido.php');
-
 
     // Cuando no se ejecuta el redireccionamiento.
     exit;
