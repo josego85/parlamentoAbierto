@@ -69,19 +69,26 @@ mysql_select_db(BD,$link) OR DIE ("Error: No es posible establecer la conexión"
             mysql_query("ROLLBACK");
             return false;
         }
-        $v_query = '';
+
         // Insertar  votaciones de diputados en la base de datos.
+        $v_query = '';
         $table = NOMBRE_TABLA_VOTACIONES_DIPUTADOS;
         foreach($p_votaciones['totales'] as $v_resultado => $v_valor){
             if(!empty($p_votaciones[$v_resultado])){
                 foreach($p_votaciones[$v_resultado] as $v_nombre_diputados){
                     $v_nombre_diputados = utf8_decode($v_nombre_diputados);
                     // Parche rapido. No se porque viene un ).
-                    if($v_nombre_diputados != ")"){
+                    if(!is_array($v_nombre_diputados)){
                         $v_query1 = "select diputadoId, bloqueId from diputados where nombre = \"$v_nombre_diputados\"";
                         $result = mysql_query($v_query1);
+
+echo "<br>query: ". $v_query1;
                         if(mysql_num_rows($result) <= 0){
                             mysql_query("ROLLBACK");
+                            
+//print_r($p_votaciones['totales']);
+print_r($p_votaciones);
+die();
                             return false;
                         }
                         $v_obj_diputado = mysql_fetch_array($result);
