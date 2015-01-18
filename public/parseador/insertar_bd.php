@@ -4,8 +4,7 @@
         //$ft = new FusionTable($token, API_KEY_GOOGLE_TABLE_FUSION);
 
         //$v_consulta_diputados = "SELECT * FROM " . NOMBRE_TABLA_DIPUTADOS;
-        // $v_array_diputados = json_decode($ft->query($v_consulta_diputados));
-
+        // $v_array_diputados = json_decode($ft->query($v_consulta_diputados)):
         $v_caracter_separador = ",";
 
         // Valores de votacion de los diputados.
@@ -13,7 +12,9 @@
         // - 1 = Negativo
         // - 2 = Abstencion
         // - 3 = Ausente
-
+// Parche rapido.
+$link=mysql_connect(HOST, "carga","K/8?!i^$$!3<#ng");
+mysql_select_db(BD,$link) OR DIE ("Error: No es posible establecer la conexión");
 
         //$v_asunto = preg_replace(,' ',utf8_encode($p_cabecera['asunto']));
         //$v_asunto = utf8_decode(preg_replace('/&.*;/', ' ', $p_cabecera['asunto']));
@@ -28,6 +29,7 @@
         $v_mayoria = "";
         $v_resultado = $p_cabecera['resultado'];
         $v_presidente = $p_cabecera['presidente'];
+
         // Se suma la cantidad de si, no, abstencion para los presentes.
         $v_presentes = $p_votaciones['totales']['si'] +  $p_votaciones['totales']['no'] + $p_votaciones['totales']['abstencion'];
 
@@ -68,47 +70,48 @@
             return false;
         }
         $v_query = '';
-
         // Insertar  votaciones de diputados en la base de datos.
         $table = NOMBRE_TABLA_VOTACIONES_DIPUTADOS;
         foreach($p_votaciones['totales'] as $v_resultado => $v_valor){
             if(!empty($p_votaciones[$v_resultado])){
                 foreach($p_votaciones[$v_resultado] as $v_nombre_diputados){
                     $v_nombre_diputados = utf8_decode($v_nombre_diputados);
-                    $v_query1 = "select diputadoId, bloqueId from diputados where nombre = \"$v_nombre_diputados\"";
-                    $result = mysql_query($v_query1);
-                    if(mysql_num_rows($result) <= 0){
-                        mysql_query("ROLLBACK");
-                        return false;
-                    }
-                    $v_obj_diputado = mysql_fetch_array($result);
-                    if(!empty($v_obj_diputado)){
-                        $v_diputado_id = $v_obj_diputado['diputadoId'];
-                        $v_bloque_id = $v_obj_diputado['bloqueId'];
-                        switch($v_resultado){
-                            case 'si':
-                                $v_voto = 0;		// El valor 0 indica afirmativo.
-                                break;
-                            case 'no':
-                                $v_voto = 1;		// El valor 1 indica negativo.
-                                break;
-                            case 'abstencion':
-                                $v_voto = 2;		// El valor 2 indica abstencion.
-                                break;
-                            case 'ausentes':
-                                $v_voto = 3;		// El valor 3 indica ausente.
-                                break;
-                        }
-                        $v_valores_votacion_diputado = "(" . $v_asuntoId . $v_caracter_separador . $v_diputado_id .
-                        $v_caracter_separador . $v_bloque_id . $v_caracter_separador . $v_voto . ")";
-
-                        $v_query= "INSERT INTO $table (asuntoId, diputadoId, bloqueId, voto) VALUES " . $v_valores_votacion_diputado . "; ";
-                        $v_result = mysql_query($v_query) or die(mysql_error());
-                        if(!$v_result){
+                    // Parche rapido. No se porque viene un ).
+                    if($v_nombre_diputados != ")"){
+                        $v_query1 = "select diputadoId, bloqueId from diputados where nombre = \"$v_nombre_diputados\"";
+                        $result = mysql_query($v_query1);
+                        if(mysql_num_rows($result) <= 0){
                             mysql_query("ROLLBACK");
                             return false;
                         }
-                    }
+                        $v_obj_diputado = mysql_fetch_array($result);
+                        if(!empty($v_obj_diputado)){
+                            $v_diputado_id = $v_obj_diputado['diputadoId'];
+                            $v_bloque_id = $v_obj_diputado['bloqueId'];
+                            switch($v_resultado){
+                                case 'si':
+		                    $v_voto = 0;            // El valor 0 indica afirmativo.
+                                    break;
+                                case 'no':
+                                    $v_voto = 1;            // El valor 1 indica negativo.
+                                    break;
+                                case 'abstencion':
+                                    $v_voto = 2;            // El valor 2 indica abstencion.
+                                    break;
+                                case 'ausentes':
+                                    $v_voto = 3;            // El valor 3 indica ausente.
+                                    break;
+                            } // Fin del switch.
+                            $v_valores_votacion_diputado = "(" . $v_asuntoId . $v_caracter_separador . $v_diputado_id .
+                            $v_caracter_separador . $v_bloque_id . $v_caracter_separador . $v_voto . ")"; 
+                            $v_query= "INSERT INTO $table (asuntoId, diputadoId, bloqueId, voto) VALUES " . $v_valores_votacion_diputado . "; ";
+                            $v_result = mysql_query($v_query) or die(mysql_error());
+                            if(!$v_result){
+                                mysql_query("ROLLBACK");
+                                return false;
+                            }
+                        } // Fin del if.
+                    } // Fin del if.
                 }
             }
         }
