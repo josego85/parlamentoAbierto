@@ -2,7 +2,9 @@
     require 'limpiarArchivoRTF.php';
     require_once('conexion.php');
     require 'insertar_bd.php';
-    session_start();
+    if(!session_id()){
+        session_start();
+    }
     if(!$_SESSION['logged']){
         header('Location: '.'salir.php');
         exit;
